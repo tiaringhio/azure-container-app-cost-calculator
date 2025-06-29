@@ -12,26 +12,22 @@
         "vcpu": {
           "usd": {
             "perSecond": 0.000024,
-            "perHour": 0.0864,
             "description": "vCPU usage per second"
           },
           "eur": {
-            "perSecond": 0.0000213,
-            "perHour": 0.07668,
+            "perSecond": 0.0000301,
             "description": "vCPU usage per second"
           }
         },
         "memory": {
           "usd": {
-            "perSecond": 0.000003,
+            "perSecond": 0.0000301,
             "perGibPerSecond": 0.000003,
-            "perGbPerHour": 0.0108,
             "description": "Memory (GiB) usage per second"
           },
           "eur": {
-            "perSecond": 0.0000027,
-            "perGibPerSecond": 0.0000027,
-            "perGbPerHour": 0.00972,
+            "perSecond": 0.0000036,
+            "perGibPerSecond": 0.0000036,
             "description": "Memory (GiB) usage per second"
           }
         }
@@ -41,24 +37,20 @@
       "pricing": {
         "vcpu": {
           "usd": {
-            "perSecond": 0.000003,
-            "perHour": 0.0108
+            "perSecond": 0.000003
           },
           "eur": {
-            "perSecond": 0.0000301,
-            "perHour": 0.10836
+            "perSecond": 0.0000301
           }
         },
         "memory": {
           "usd": {
             "perSecond": 0.000003,
-            "perGibPerSecond": 0.000003,
-            "perGbPerHour": 0.0108
+            "perGibPerSecond": 0.000003
           },
           "eur": {
             "perSecond": 0.0000027,
-            "perGibPerSecond": 0.0000027,
-            "perGbPerHour": 0.00972
+            "perGibPerSecond": 0.0000027
           }
         }
       }

@@ -39,8 +39,8 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
   // Use dynamic pricing with the selected region
   const { pricing, getFormattedPrice } = usePricing(selectedRegion);
   
-  const cpuCostPerHour = currentCombination.cpu * pricing.vcpu_per_hour;
-  const memoryCostPerHour = currentCombination.memory * pricing.memory_per_gb_per_hour;
+  const cpuCostPerHour = currentCombination.cpu * pricing.vcpu_per_second * 3600;
+  const memoryCostPerHour = currentCombination.memory * pricing.memory_per_gib_second * 3600;
   
   // Calculate detailed daily breakdown
   const dailyBreakdown = DAYS.map((day, dayIndex) => {
@@ -198,13 +198,19 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
               <TableRow>
                 <TableCell>vCPU</TableCell>
                 <TableCell className="text-right">{currentCombination.cpu}</TableCell>
-                <TableCell className="text-right font-mono">{getFormattedPrice(pricing.vcpu_per_hour)}/h</TableCell>
+                <TableCell className="text-right font-mono">
+                  <div>{getFormattedPrice(pricing.vcpu_per_second, 7)}/sec</div>
+                  <div className="text-xs text-muted-foreground">×3600 = {getFormattedPrice(pricing.vcpu_per_second * 3600)}/h</div>
+                </TableCell>
                 <TableCell className="text-right font-mono">{getFormattedPrice(cpuCostPerHour)}</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell>Memory (GB)</TableCell>
                 <TableCell className="text-right">{currentCombination.memory}</TableCell>
-                <TableCell className="text-right font-mono">{getFormattedPrice(pricing.memory_per_gb_per_hour)}/GB/h</TableCell>
+                <TableCell className="text-right font-mono">
+                  <div>{getFormattedPrice(pricing.memory_per_gib_second, 7)}/sec</div>
+                  <div className="text-xs text-muted-foreground">×3600 = {getFormattedPrice(pricing.memory_per_gib_second * 3600)}/GB/h</div>
+                </TableCell>
                 <TableCell className="text-right font-mono">{getFormattedPrice(memoryCostPerHour)}</TableCell>
               </TableRow>
               <TableRow className="border-t">
@@ -282,10 +288,10 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
                 <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg text-sm space-y-2 border border-gray-200 dark:border-gray-700">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <strong className="text-foreground">Component Costs (per hour per instance):</strong>
+                      <strong className="text-foreground">Component Costs (per second → per hour per instance):</strong>
                       <ul className="mt-1 space-y-1 text-xs text-muted-foreground">
-                        <li>• CPU: {currentCombination.cpu} vCPU × {getFormattedPrice(pricing.vcpu_per_hour)} = {getFormattedPrice(cpuCostPerHour, 5)}</li>
-                        <li>• Memory: {currentCombination.memory} GB × {getFormattedPrice(pricing.memory_per_gb_per_hour)} = {getFormattedPrice(memoryCostPerHour, 5)}</li>
+                        <li>• CPU: {currentCombination.cpu} vCPU × {getFormattedPrice(pricing.vcpu_per_second, 7)}/sec × 3,600 = {getFormattedPrice(cpuCostPerHour, 5)}/hour</li>
+                        <li>• Memory: {currentCombination.memory} GB × {getFormattedPrice(pricing.memory_per_gib_second, 7)}/sec × 3,600 = {getFormattedPrice(memoryCostPerHour, 5)}/hour</li>
                         <li>• <strong className="text-foreground">Total per instance/hour: {getFormattedPrice(costResults.totalCostPerInstancePerHour, 5)}</strong></li>
                       </ul>
                     </div>

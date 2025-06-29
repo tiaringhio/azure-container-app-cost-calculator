@@ -9,8 +9,6 @@ export interface CpuMemoryCombination {
 export interface PricingConfig {
   vcpu_per_second: number;
   memory_per_gib_second: number;
-  vcpu_per_hour: number;
-  memory_per_gb_per_hour: number;
   regions: Record<string, number>;
 }
 
@@ -41,12 +39,10 @@ export interface PricingData {
         vcpu: {
           usd: {
             perSecond: number;
-            perHour: number;
             description: string;
           };
           eur: {
             perSecond: number;
-            perHour: number;
             description: string;
           };
         };
@@ -54,13 +50,11 @@ export interface PricingData {
           usd: {
             perSecond: number;
             perGibPerSecond: number;
-            perGbPerHour: number;
             description: string;
           };
           eur: {
             perSecond: number;
             perGibPerSecond: number;
-            perGbPerHour: number;
             description: string;
           };
         };
@@ -71,23 +65,19 @@ export interface PricingData {
         vcpu: {
           usd: {
             perSecond: number;
-            perHour: number;
           };
           eur: {
             perSecond: number;
-            perHour: number;
           };
         };
         memory: {
           usd: {
             perSecond: number;
             perGibPerSecond: number;
-            perGbPerHour: number;
           };
           eur: {
             perSecond: number;
             perGibPerSecond: number;
-            perGbPerHour: number;
           };
         };
       };
@@ -121,9 +111,9 @@ export interface ScheduleStep {
 export type Schedule = Record<number, Record<number, number>>;
 
 export interface CostResults {
-  vcpuCostPerHour: number;
-  memoryCostPerHour: number;
-  totalCostPerInstancePerHour: number;
+  vcpuCostPerHour: number; // Calculated from per-second pricing * 3600
+  memoryCostPerHour: number; // Calculated from per-second pricing * 3600
+  totalCostPerInstancePerHour: number; // Calculated from per-second pricing * 3600
   totalActiveInstanceHours: number;
   weeklyCost: number;
   monthlyCost: number;

@@ -19,8 +19,8 @@ import type { ContainerApp, CostResults, Schedule } from '../types/calculator';
 const calculateAppCosts = (
   app: ContainerApp, 
   selectedRegion: string, 
-  vcpuPricePerHour: number, 
-  memoryPricePerHour: number,
+  vcpuPricePerHour: number,  // Calculated from per-second * 3600
+  memoryPricePerHour: number, // Calculated from per-second * 3600
   regionMultiplier: number = 1.0
 ): CostResults => {
   const combo = VALID_COMBINATIONS[app.selectedCombination];
@@ -123,7 +123,6 @@ export default function Home() {
     applySteps,
     calculateCosts,
     getCurrentCombination,
-    getCurrentCost,
     setState
   } = useCalculator();
 
@@ -157,6 +156,43 @@ export default function Home() {
     }
   }, [activeApp, state, updateAppCombination, updateAppSchedule, updateAppSteps]);
 
+  // Wrapper functions that auto-sync changes to multi-app state
+  const handleScheduleUpdate = useCallback((day: number, hour: number, instances: number) => {
+    updateSchedule(day, hour, instances);
+    // Sync after update
+    setTimeout(() => syncAppWithCalculator(), 0);
+  }, [updateSchedule, syncAppWithCalculator]);
+
+  const handleSetPreset = useCallback((preset: "business" | "extended" | "247" | "clear") => {
+    setSchedulePreset(preset);
+    // Sync after update
+    setTimeout(() => syncAppWithCalculator(), 0);
+  }, [setSchedulePreset, syncAppWithCalculator]);
+
+  const handleAddStep = useCallback(() => {
+    addStep();
+    // Sync after update
+    setTimeout(() => syncAppWithCalculator(), 0);
+  }, [addStep, syncAppWithCalculator]);
+
+  const handleRemoveStep = useCallback((index: number) => {
+    removeStep(index);
+    // Sync after update
+    setTimeout(() => syncAppWithCalculator(), 0);
+  }, [removeStep, syncAppWithCalculator]);
+
+  const handleUpdateStep = useCallback((index: number, step: any) => {
+    updateStep(index, step);
+    // Sync after update
+    setTimeout(() => syncAppWithCalculator(), 0);
+  }, [updateStep, syncAppWithCalculator]);
+
+  const handleApplySteps = useCallback(() => {
+    applySteps();
+    // Sync after update
+    setTimeout(() => syncAppWithCalculator(), 0);
+  }, [applySteps, syncAppWithCalculator]);
+
   // Calculate total costs for all apps (debounced to avoid too frequent updates)
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -166,14 +202,15 @@ export default function Home() {
         let totalCpuHours = 0;
         let totalMemoryHours = 0;
 
-        multiAppState.apps.forEach(app => {
+        multiAppState.apps.forEach((app, index) => {
           const costs = calculateAppCosts(
             app, 
             multiAppState.selectedRegion, 
-            pricing.vcpu_per_hour, 
-            pricing.memory_per_gb_per_hour, 
+            pricing.vcpu_per_second * 3600, 
+            pricing.memory_per_gib_second * 3600, 
             pricing.regions[multiAppState.selectedRegion] || 1.0
           );
+          
           totalWeeklyCost += costs.weeklyCost;
           totalInstances += costs.maxInstances;
           
@@ -194,7 +231,7 @@ export default function Home() {
     }, 100); // Debounce di 100ms
 
     return () => clearTimeout(timeoutId);
-  }, [multiAppState.apps.length, multiAppState.selectedRegion, pricing, ...multiAppState.apps.map(app => `${app.id}-${app.selectedCombination}-${JSON.stringify(app.schedule)}`)]);
+  }, [multiAppState.apps, multiAppState.selectedRegion, pricing, updateTotalCosts]);
 
   // Calculate costs for active app using dynamic pricing
   const costResults = React.useMemo(() => {
@@ -225,19 +262,13 @@ export default function Home() {
     return calculateAppCosts(
       currentApp,
       multiAppState.selectedRegion,
-      pricing.vcpu_per_hour,
-      pricing.memory_per_gb_per_hour,
+      pricing.vcpu_per_second * 3600,
+      pricing.memory_per_gib_second * 3600,
       pricing.regions[multiAppState.selectedRegion] || 1.0
     );
   }, [activeApp, multiAppState.selectedRegion, pricing, state.selectedCombination, state.schedule]);
   
   const currentCombination = getCurrentCombination();
-
-  const handleApplySteps = () => {
-    applySteps();
-    // Manually sync the app with calculator changes
-    setTimeout(() => syncAppWithCalculator(), 0);
-  };
 
   const handleCombinationChange = useCallback((index: number) => {
     updateCombination(index);
@@ -306,21 +337,21 @@ export default function Home() {
           {/* Step Configuration */}
           <StepConfiguration
             configSteps={state.configSteps}
-            onAddStep={addStep}
-            onRemoveStep={removeStep}
-            onUpdateStep={updateStep}
+            onAddStep={handleAddStep}
+            onRemoveStep={handleRemoveStep}
+            onUpdateStep={handleUpdateStep}
             onApplySteps={handleApplySteps}
           />
 
           {/* Schedule Grid */}
           <ScheduleGrid
             schedule={state.schedule}
-            onUpdateSchedule={updateSchedule}
+            onUpdateSchedule={handleScheduleUpdate}
           />
 
           {/* Schedule Presets */}
           <SchedulePresets
-            onSetPreset={setSchedulePreset}
+            onSetPreset={handleSetPreset}
           />
 
           {/* Chart Visualization */}

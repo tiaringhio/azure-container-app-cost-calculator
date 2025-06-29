@@ -7,10 +7,7 @@ const pricingData = azurePricingData as PricingData;
 // Prezzi Azure Container Apps - Active Usage (Dynamic pricing)
 export const PRICING: PricingConfig = {
   vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur.perSecond,
-  memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.eur.perSecond,
-  // Conversione a ore per facilità di calcolo
-  vcpu_per_hour: pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur.perHour,
-  memory_per_gb_per_hour: pricingData.consumptionPlan.activeUsage.pricing.memory.eur.perGbPerHour,
+  memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.eur.perGibPerSecond,
   regions: Object.fromEntries(
     Object.entries(pricingData.regions).map(([key, region]) => [key, region.multiplier])
   )
@@ -72,17 +69,13 @@ export const getDynamicPricing = (region: string, currency: string): PricingConf
   if (regionCurrency === 'EUR' && pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur) {
     basePricing = {
       vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur.perSecond,
-      memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.eur.perSecond,
-      vcpu_per_hour: pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur.perHour,
-      memory_per_gb_per_hour: pricingData.consumptionPlan.activeUsage.pricing.memory.eur.perGbPerHour,
+      memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.eur.perGibPerSecond,
     };
   } else {
     // Fallback a USD se la valuta della regione non è disponibile
     basePricing = {
       vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd.perSecond,
-      memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perSecond,
-      vcpu_per_hour: pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd.perHour,
-      memory_per_gb_per_hour: pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perGbPerHour,
+      memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perGibPerSecond,
     };
   }
 
@@ -90,8 +83,6 @@ export const getDynamicPricing = (region: string, currency: string): PricingConf
   return {
     vcpu_per_second: basePricing.vcpu_per_second * regionData.multiplier,
     memory_per_gib_second: basePricing.memory_per_gib_second * regionData.multiplier,
-    vcpu_per_hour: basePricing.vcpu_per_hour * regionData.multiplier,
-    memory_per_gb_per_hour: basePricing.memory_per_gb_per_hour * regionData.multiplier,
     regions: Object.fromEntries(
       Object.entries(pricingData.regions).map(([key, region]) => [key, region.multiplier])
     )

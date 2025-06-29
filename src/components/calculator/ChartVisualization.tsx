@@ -261,12 +261,12 @@ export const ChartVisualization: React.FC<ChartVisualizationProps> = ({
           <h5 className="text-sm font-medium">Cost Breakdown</h5>
           <div className="text-xs space-y-1">
             <div className="flex justify-between">
-              <span>CPU Cost ({getFormattedPrice(currentCombination.cpu * pricing.vcpu_per_hour)}/hour/instance):</span>
-              <span>{getFormattedPrice((costResults.monthlyCost * (currentCombination.cpu * pricing.vcpu_per_hour) / costResults.totalCostPerInstancePerHour), 2)}/month</span>
+              <span>CPU Cost ({getFormattedPrice(currentCombination.cpu * pricing.vcpu_per_second * 3600)}/hour/instance):</span>
+              <span>{getFormattedPrice((costResults.monthlyCost * (currentCombination.cpu * pricing.vcpu_per_second * 3600) / costResults.totalCostPerInstancePerHour), 2)}/month</span>
             </div>
             <div className="flex justify-between">
-              <span>Memory Cost ({getFormattedPrice(currentCombination.memory * pricing.memory_per_gb_per_hour)}/hour/instance):</span>
-              <span>{getFormattedPrice((costResults.monthlyCost * (currentCombination.memory * pricing.memory_per_gb_per_hour) / costResults.totalCostPerInstancePerHour), 2)}/month</span>
+              <span>Memory Cost ({getFormattedPrice(currentCombination.memory * pricing.memory_per_gib_second * 3600)}/hour/instance):</span>
+              <span>{getFormattedPrice((costResults.monthlyCost * (currentCombination.memory * pricing.memory_per_gib_second * 3600) / costResults.totalCostPerInstancePerHour), 2)}/month</span>
             </div>
           </div>
         </div>

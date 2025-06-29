@@ -32,7 +32,7 @@ export const ResourceConfiguration: React.FC<ResourceConfigurationProps> = ({
   const currentCombo = VALID_COMBINATIONS[selectedCombination];
   
   // Calculate current cost with dynamic pricing
-  const currentCost = (currentCombo.cpu * pricing.vcpu_per_hour) + (currentCombo.memory * pricing.memory_per_gb_per_hour);
+  const currentCost = (currentCombo.cpu * pricing.vcpu_per_second * 3600) + (currentCombo.memory * pricing.memory_per_gib_second * 3600);
 
   const handlePresetClick = (presetIndex: number) => {
     onCombinationChange(presetIndex);
@@ -139,13 +139,19 @@ export const ResourceConfiguration: React.FC<ResourceConfigurationProps> = ({
                     <div className="flex justify-between">
                       <span className="text-blue-500 dark:text-blue-500">Per second:</span>
                       <span className="font-medium text-blue-900 dark:text-blue-100">
-                        {getFormattedPrice(currentCombo.cpu * pricing.vcpu_per_second, 6)}
+                        {getFormattedPrice(pricing.vcpu_per_second, 7)}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-blue-500 dark:text-blue-500">Per hour:</span>
+                    <div className="flex justify-between text-xs text-blue-400 dark:text-blue-500">
+                      <span>× {currentCombo.cpu} vCPU:</span>
+                      <span className="font-medium">
+                        {getFormattedPrice(currentCombo.cpu * pricing.vcpu_per_second, 7)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between border-t border-blue-200 dark:border-blue-600 pt-1">
+                      <span className="text-blue-500 dark:text-blue-500">Per hour (×3600):</span>
                       <span className="font-medium text-blue-900 dark:text-blue-100">
-                        {getFormattedPrice(currentCombo.cpu * pricing.vcpu_per_hour)}
+                        {getFormattedPrice(currentCombo.cpu * pricing.vcpu_per_second * 3600)}
                       </span>
                     </div>
                   </div>
@@ -156,13 +162,19 @@ export const ResourceConfiguration: React.FC<ResourceConfigurationProps> = ({
                     <div className="flex justify-between">
                       <span className="text-blue-500 dark:text-blue-500">Per second:</span>
                       <span className="font-medium text-blue-900 dark:text-blue-100">
-                        {getFormattedPrice(currentCombo.memory * pricing.memory_per_gib_second, 6)}
+                        {getFormattedPrice(pricing.memory_per_gib_second, 7)}
                       </span>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-blue-500 dark:text-blue-500">Per hour:</span>
+                    <div className="flex justify-between text-xs text-blue-400 dark:text-blue-500">
+                      <span>× {currentCombo.memory} GB:</span>
+                      <span className="font-medium">
+                        {getFormattedPrice(currentCombo.memory * pricing.memory_per_gib_second, 7)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between border-t border-blue-200 dark:border-blue-600 pt-1">
+                      <span className="text-blue-500 dark:text-blue-500">Per hour (×3600):</span>
                       <span className="font-medium text-blue-900 dark:text-blue-100">
-                        {getFormattedPrice(currentCombo.memory * pricing.memory_per_gb_per_hour)}
+                        {getFormattedPrice(currentCombo.memory * pricing.memory_per_gib_second * 3600)}
                       </span>
                     </div>
                   </div>

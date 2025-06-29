@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import type { CalculatorState, Schedule, ScheduleStep, CostResults } from '../types/calculator';
-import { VALID_COMBINATIONS, PRICING } from '../lib/constants';
+import { VALID_COMBINATIONS } from '../lib/constants';
+import { usePricing } from './usePricing';
 
 const initializeDefaultSteps = (): ScheduleStep[] => [
   {
@@ -27,6 +28,8 @@ const initializeDefaultSteps = (): ScheduleStep[] => [
 ];
 
 export const useCalculator = () => {
+  const { pricing } = usePricing();
+  
   const [state, setState] = useState<CalculatorState>({
     selectedCombination: 3, // Default: 1 vCPU, 2 GB
     selectedRegion: 'westeurope',
@@ -191,7 +194,7 @@ export const useCalculator = () => {
     const combo = VALID_COMBINATIONS[state.selectedCombination];
     const vcpu = combo.cpu;
     const memory = combo.memory;
-    const regionMultiplier = PRICING.regions[state.selectedRegion] || 1.0;
+    const regionMultiplier = pricing.regions[state.selectedRegion] || 1.0;
 
     // Calcolo ore totali ATTIVE (solo quando istanze > 0) e costo per ora per istanza
     let totalActiveInstanceHours = 0;
@@ -209,8 +212,8 @@ export const useCalculator = () => {
     }
 
     // Costo per ora per singola istanza ATTIVA (0 istanze = 0 costi)
-    const vcpuCostPerHour = vcpu * PRICING.vcpu_per_hour * regionMultiplier;
-    const memoryCostPerHour = memory * PRICING.memory_per_gb_per_hour * regionMultiplier;
+    const vcpuCostPerHour = vcpu * pricing.vcpu_per_second * 3600 * regionMultiplier;
+    const memoryCostPerHour = memory * pricing.memory_per_gib_second * 3600 * regionMultiplier;
     const totalCostPerInstancePerHour = vcpuCostPerHour + memoryCostPerHour;
 
     // Costi settimanali e mensili (solo per ore attive)
@@ -249,7 +252,7 @@ export const useCalculator = () => {
       activeSlots,
       efficiencyPercentage
     };
-  }, [state]);
+  }, [state, pricing]);
 
   const getCurrentCombination = useCallback(() => {
     return VALID_COMBINATIONS[state.selectedCombination];
@@ -257,14 +260,14 @@ export const useCalculator = () => {
 
   const getCurrentCost = useCallback(() => {
     const combo = getCurrentCombination();
-    const regionMultiplier = PRICING.regions[state.selectedRegion] || 1.0;
+    const regionMultiplier = pricing.regions[state.selectedRegion] || 1.0;
     
-    const vcpuCostPerHour = combo.cpu * PRICING.vcpu_per_hour * regionMultiplier;
-    const memoryCostPerHour = combo.memory * PRICING.memory_per_gb_per_hour * regionMultiplier;
+    const vcpuCostPerHour = combo.cpu * pricing.vcpu_per_second * 3600 * regionMultiplier;
+    const memoryCostPerHour = combo.memory * pricing.memory_per_gib_second * 3600 * regionMultiplier;
     const totalCostPerHour = vcpuCostPerHour + memoryCostPerHour;
     
     return totalCostPerHour;
-  }, [state.selectedCombination, state.selectedRegion, getCurrentCombination]);
+  }, [state.selectedCombination, state.selectedRegion, getCurrentCombination, pricing]);
 
   return {
     state,
