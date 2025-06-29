@@ -16,8 +16,8 @@
             "description": "vCPU usage per second"
           },
           "eur": {
-            "perSecond": 0.0000301,
-            "perHour": 0.10836,
+            "perSecond": 0.0000213,
+            "perHour": 0.07668,
             "description": "vCPU usage per second"
           }
         },
@@ -29,9 +29,9 @@
             "description": "Memory (GiB) usage per second"
           },
           "eur": {
-            "perSecond": 0.0000036,
-            "perGibPerSecond": 0.0000036,
-            "perGbPerHour": 0.01296,
+            "perSecond": 0.0000027,
+            "perGibPerSecond": 0.0000027,
+            "perGbPerHour": 0.00972,
             "description": "Memory (GiB) usage per second"
           }
         }
@@ -56,9 +56,9 @@
             "perGbPerHour": 0.0108
           },
           "eur": {
-            "perSecond": 0.0000036,
-            "perGibPerSecond": 0.0000036,
-            "perGbPerHour": 0.01296
+            "perSecond": 0.0000027,
+            "perGibPerSecond": 0.0000027,
+            "perGbPerHour": 0.00972
           }
         }
       }

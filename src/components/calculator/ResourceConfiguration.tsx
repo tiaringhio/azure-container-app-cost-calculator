@@ -9,14 +9,16 @@ import { usePricing } from '../../hooks/usePricing';
 interface ResourceConfigurationProps {
   selectedCombination: number;
   onCombinationChange: (index: number) => void;
+  selectedRegion?: string;
 }
 
 export const ResourceConfiguration: React.FC<ResourceConfigurationProps> = ({
   selectedCombination,
   onCombinationChange,
+  selectedRegion
 }) => {
   const {
-    selectedRegion,
+    selectedRegion: currentRegion,
     selectedCurrency,
     pricing,
     currencySymbol,
@@ -25,7 +27,7 @@ export const ResourceConfiguration: React.FC<ResourceConfigurationProps> = ({
     updateRegion,
     updateCurrency,
     getFormattedPrice
-  } = usePricing();
+  } = usePricing(selectedRegion);
 
   const currentCombo = VALID_COMBINATIONS[selectedCombination];
   
@@ -131,17 +133,39 @@ export const ResourceConfiguration: React.FC<ResourceConfigurationProps> = ({
             {/* Cost breakdown by component */}
             <div className="mt-3 pt-3 border-t border-blue-200 dark:border-blue-700">
               <div className="grid grid-cols-2 gap-4 text-xs">
-                <div>
-                  <span className="text-blue-600 dark:text-blue-400">CPU Cost:</span>
-                  <span className="ml-1 font-medium text-blue-900 dark:text-blue-100">
-                    {getFormattedPrice(currentCombo.cpu * pricing.vcpu_per_hour)}
-                  </span>
+                <div className="space-y-1">
+                  <div className="font-medium text-blue-600 dark:text-blue-400">CPU Cost:</div>
+                  <div className="space-y-0.5">
+                    <div className="flex justify-between">
+                      <span className="text-blue-500 dark:text-blue-500">Per second:</span>
+                      <span className="font-medium text-blue-900 dark:text-blue-100">
+                        {getFormattedPrice(currentCombo.cpu * pricing.vcpu_per_second, 6)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-blue-500 dark:text-blue-500">Per hour:</span>
+                      <span className="font-medium text-blue-900 dark:text-blue-100">
+                        {getFormattedPrice(currentCombo.cpu * pricing.vcpu_per_hour)}
+                      </span>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <span className="text-blue-600 dark:text-blue-400">Memory Cost:</span>
-                  <span className="ml-1 font-medium text-blue-900 dark:text-blue-100">
-                    {getFormattedPrice(currentCombo.memory * pricing.memory_per_gb_per_hour)}
-                  </span>
+                <div className="space-y-1">
+                  <div className="font-medium text-blue-600 dark:text-blue-400">Memory Cost:</div>
+                  <div className="space-y-0.5">
+                    <div className="flex justify-between">
+                      <span className="text-blue-500 dark:text-blue-500">Per second:</span>
+                      <span className="font-medium text-blue-900 dark:text-blue-100">
+                        {getFormattedPrice(currentCombo.memory * pricing.memory_per_gib_second, 6)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-blue-500 dark:text-blue-500">Per hour:</span>
+                      <span className="font-medium text-blue-900 dark:text-blue-100">
+                        {getFormattedPrice(currentCombo.memory * pricing.memory_per_gb_per_hour)}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

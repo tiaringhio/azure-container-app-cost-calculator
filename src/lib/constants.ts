@@ -58,22 +58,40 @@ export const CURRENCIES: Currency[] = Object.entries(pricingData.currencies).map
 // Funzione per ottenere il pricing dinamico
 export const getDynamicPricing = (region: string, currency: string): PricingConfig => {
   const regionData = pricingData.regions[region as keyof typeof pricingData.regions];
-  const currencyData = pricingData.currencies[currency as keyof typeof pricingData.currencies];
   
-  if (!regionData || !currencyData) {
-    console.warn(`Region ${region} or currency ${currency} not found, using defaults`);
+  if (!regionData) {
+    console.warn(`Region ${region} not found, using defaults`);
     return PRICING;
   }
 
-  // Calcola il rate di conversione dalla valuta base (USD) alla valuta target
-  const baseRates = pricingData.currencies.USD.rates;
-  const conversionRate = currency === 'USD' ? 1 : baseRates[currency as keyof typeof baseRates] || 1;
-  
+  // Determina la valuta della regione
+  const regionCurrency = regionData.currency;
+  let basePricing;
+
+  // Usa direttamente i prezzi nella valuta della regione se disponibili
+  if (regionCurrency === 'EUR' && pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur) {
+    basePricing = {
+      vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur.perSecond,
+      memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.eur.perSecond,
+      vcpu_per_hour: pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur.perHour,
+      memory_per_gb_per_hour: pricingData.consumptionPlan.activeUsage.pricing.memory.eur.perGbPerHour,
+    };
+  } else {
+    // Fallback a USD se la valuta della regione non è disponibile
+    basePricing = {
+      vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd.perSecond,
+      memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perSecond,
+      vcpu_per_hour: pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd.perHour,
+      memory_per_gb_per_hour: pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perGbPerHour,
+    };
+  }
+
+  // Applica il moltiplicatore della regione
   return {
-    vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd.perSecond * regionData.multiplier * conversionRate,
-    memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perSecond * regionData.multiplier * conversionRate,
-    vcpu_per_hour: pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd.perHour * regionData.multiplier * conversionRate,
-    memory_per_gb_per_hour: pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perGbPerHour * regionData.multiplier * conversionRate,
+    vcpu_per_second: basePricing.vcpu_per_second * regionData.multiplier,
+    memory_per_gib_second: basePricing.memory_per_gib_second * regionData.multiplier,
+    vcpu_per_hour: basePricing.vcpu_per_hour * regionData.multiplier,
+    memory_per_gb_per_hour: basePricing.memory_per_gb_per_hour * regionData.multiplier,
     regions: Object.fromEntries(
       Object.entries(pricingData.regions).map(([key, region]) => [key, region.multiplier])
     )

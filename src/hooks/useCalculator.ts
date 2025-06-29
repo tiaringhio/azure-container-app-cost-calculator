@@ -139,6 +139,14 @@ export const useCalculator = () => {
       const endMinute = parseInt(step.endTime.split(':')[1]);
 
       step.days.forEach(dayIndex => {
+        // Assicurati che il giorno esista nello schedule
+        if (!newSchedule[dayIndex]) {
+          newSchedule[dayIndex] = {};
+          for (let h = 0; h < 24; h++) {
+            newSchedule[dayIndex][h] = 0;
+          }
+        }
+
         // Gestisci il caso in cui l'ora di fine è il giorno successivo
         if (endHour < startHour || (endHour === startHour && endMinute < startMinute)) {
           // Applica dall'ora di inizio fino a mezzanotte
@@ -147,6 +155,15 @@ export const useCalculator = () => {
           }
           // Applica da mezzanotte all'ora di fine il giorno successivo
           const nextDay = (dayIndex + 1) % 7;
+          
+          // Assicurati che il giorno successivo esista
+          if (!newSchedule[nextDay]) {
+            newSchedule[nextDay] = {};
+            for (let h = 0; h < 24; h++) {
+              newSchedule[nextDay][h] = 0;
+            }
+          }
+          
           for (let hour = 0; hour < endHour; hour++) {
             newSchedule[nextDay][hour] = step.instances;
           }
@@ -208,9 +225,10 @@ export const useCalculator = () => {
     }, 0);
     const avgInstancesPerHour = totalActiveInstanceHours / 168; // 168 ore in una settimana
     const avgActiveInstancesPerActiveHour = activeSlots > 0 ? totalActiveInstanceHours / activeSlots : 0;
-    const maxInstances = Math.max(0, ...Object.values(state.schedule).map(day => 
-      Math.max(0, ...Object.values(day))
-    ));
+    const maxInstances = Math.max(0, ...Object.values(state.schedule).map(day => {
+      const dayValues = Object.values(day);
+      return dayValues.length > 0 ? Math.max(0, ...dayValues) : 0;
+    }));
 
     // Calcolo efficienza (percentuale di tempo attivo)
     const efficiencyPercentage = (activeSlots / totalSlots) * 100;
@@ -250,6 +268,7 @@ export const useCalculator = () => {
 
   return {
     state,
+    setState,
     updateCombination,
     updateRegion,
     updateSchedule,

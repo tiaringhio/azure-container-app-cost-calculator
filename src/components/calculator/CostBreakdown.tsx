@@ -23,6 +23,7 @@ interface CostBreakdownProps {
     label: string;
   };
   schedule: any; // Add schedule to show detailed calculations
+  selectedRegion?: string; // Add region prop
 }
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -30,12 +31,13 @@ const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'
 export const CostBreakdown: React.FC<CostBreakdownProps> = ({
   costResults,
   currentCombination,
-  schedule
+  schedule,
+  selectedRegion = 'westeurope'
 }) => {
   const [showDetailedCalculations, setShowDetailedCalculations] = useState(false);
   
-  // Use dynamic pricing
-  const { pricing, getFormattedPrice } = usePricing();
+  // Use dynamic pricing with the selected region
+  const { pricing, getFormattedPrice } = usePricing(selectedRegion);
   
   const cpuCostPerHour = currentCombination.cpu * pricing.vcpu_per_hour;
   const memoryCostPerHour = currentCombination.memory * pricing.memory_per_gb_per_hour;
@@ -84,9 +86,9 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
           {/* Main Cost Cards - Large and Prominent */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200 dark:border-green-800">
-              <CardContent className="p-6">
+              <CardContent className="p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-green-700 dark:text-green-300">€{(costResults.weeklyCost / 7).toFixed(2)}</div>
+                  <div className="text-xl font-bold text-green-700 dark:text-green-300">€{(costResults.weeklyCost / 7).toFixed(2)}</div>
                   <p className="text-sm font-medium text-green-600 dark:text-green-400 mt-1">Daily Cost</p>
                   <p className="text-xs text-green-500 dark:text-green-500">per day average</p>
                 </div>
@@ -94,9 +96,9 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
             </Card>
             
             <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800">
-              <CardContent className="p-6">
+              <CardContent className="p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-700 dark:text-blue-300">{getFormattedPrice(costResults.weeklyCost, 2)}</div>
+                  <div className="text-xl font-bold text-blue-700 dark:text-blue-300">{getFormattedPrice(costResults.weeklyCost, 2)}</div>
                   <p className="text-sm font-medium text-blue-600 dark:text-blue-400 mt-1">Weekly Cost</p>
                   <p className="text-xs text-blue-500 dark:text-blue-500">current schedule</p>
                 </div>
@@ -104,9 +106,9 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
             </Card>
             
             <Card className="bg-gradient-to-br from-purple-50 to-violet-50 dark:from-purple-950/20 dark:to-violet-950/20 border-purple-200 dark:border-purple-800">
-              <CardContent className="p-6">
+              <CardContent className="p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-700 dark:text-purple-300">{getFormattedPrice(costResults.monthlyCost, 2)}</div>
+                  <div className="text-xl font-bold text-purple-700 dark:text-purple-300">{getFormattedPrice(costResults.monthlyCost, 2)}</div>
                   <p className="text-sm font-medium text-purple-600 dark:text-purple-400 mt-1">Monthly Cost</p>
                   <p className="text-xs text-purple-500 dark:text-purple-500">projected (4.33 weeks)</p>
                 </div>
@@ -114,9 +116,9 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
             </Card>
             
             <Card className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 border-orange-200 dark:border-orange-800">
-              <CardContent className="p-6">
+              <CardContent className="p-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-orange-700 dark:text-orange-300">{getFormattedPrice(costResults.yearlyCost, 0)}</div>
+                  <div className="text-xl font-bold text-orange-700 dark:text-orange-300">{getFormattedPrice(costResults.yearlyCost, 0)}</div>
                   <p className="text-sm font-medium text-orange-600 dark:text-orange-400 mt-1">Yearly Cost</p>
                   <p className="text-xs text-orange-500 dark:text-orange-500">annual projection</p>
                 </div>
@@ -276,20 +278,20 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
 
               {/* Calculation formulas */}
               <div className="space-y-2">
-                <h5 className="text-sm font-medium">Calculation Formulas</h5>
-                <div className="bg-gray-50 p-4 rounded-lg text-sm space-y-2">
+                <h5 className="text-sm font-medium text-foreground">Calculation Formulas</h5>
+                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg text-sm space-y-2 border border-gray-200 dark:border-gray-700">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <strong>Component Costs (per hour per instance):</strong>
-                      <ul className="mt-1 space-y-1 text-xs">
+                      <strong className="text-foreground">Component Costs (per hour per instance):</strong>
+                      <ul className="mt-1 space-y-1 text-xs text-muted-foreground">
                         <li>• CPU: {currentCombination.cpu} vCPU × {getFormattedPrice(pricing.vcpu_per_hour)} = {getFormattedPrice(cpuCostPerHour, 5)}</li>
                         <li>• Memory: {currentCombination.memory} GB × {getFormattedPrice(pricing.memory_per_gb_per_hour)} = {getFormattedPrice(memoryCostPerHour, 5)}</li>
-                        <li>• <strong>Total per instance/hour: {getFormattedPrice(costResults.totalCostPerInstancePerHour, 5)}</strong></li>
+                        <li>• <strong className="text-foreground">Total per instance/hour: {getFormattedPrice(costResults.totalCostPerInstancePerHour, 5)}</strong></li>
                       </ul>
                     </div>
                     <div>
-                      <strong>Period Calculations:</strong>
-                      <ul className="mt-1 space-y-1 text-xs">
+                      <strong className="text-foreground">Period Calculations:</strong>
+                      <ul className="mt-1 space-y-1 text-xs text-muted-foreground">
                         <li>• Weekly: {costResults.totalActiveInstanceHours} instance-hours × {getFormattedPrice(costResults.totalCostPerInstancePerHour, 5)} = {getFormattedPrice(costResults.weeklyCost, 2)}</li>
                         <li>• Monthly: {getFormattedPrice(costResults.weeklyCost, 2)} × 4.33 weeks = {getFormattedPrice(costResults.monthlyCost, 2)}</li>
                         <li>• Yearly: {getFormattedPrice(costResults.monthlyCost, 2)} × 12 months = {getFormattedPrice(costResults.yearlyCost, 2)}</li>
@@ -297,9 +299,9 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
                     </div>
                   </div>
                   
-                  <div className="border-t pt-2 mt-3">
-                    <strong>Efficiency Metrics:</strong>
-                    <ul className="mt-1 space-y-1 text-xs">
+                  <div className="border-t border-gray-200 dark:border-gray-600 pt-2 mt-3">
+                    <strong className="text-foreground">Efficiency Metrics:</strong>
+                    <ul className="mt-1 space-y-1 text-xs text-muted-foreground">
                       <li>• Active slots: {costResults.activeSlots} out of 168 total weekly time slots</li>
                       <li>• Efficiency: ({costResults.activeSlots} ÷ 168) × 100 = {costResults.efficiencyPercentage.toFixed(1)}%</li>
                       <li>• Cost savings from scaling to zero: €{((168 * costResults.maxInstances * costResults.totalCostPerInstancePerHour) - costResults.weeklyCost).toFixed(2)}/week</li>
@@ -310,7 +312,7 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
 
               {/* Peak usage analysis */}
               <div className="space-y-2">
-                <h5 className="text-sm font-medium">Peak Usage Analysis</h5>
+                <h5 className="text-sm font-medium text-foreground">Peak Usage Analysis</h5>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <Card className="p-3">
                     <div className="text-lg font-bold text-blue-600">{costResults.maxInstances}</div>

@@ -143,3 +143,29 @@ export interface CalculatorState {
   schedule: Schedule;
   configSteps: ScheduleStep[];
 }
+
+// Nuovi tipi per supporto multi-app
+export interface ContainerApp {
+  id: string;
+  name: string;
+  color: string;
+  selectedCombination: number;
+  schedule: Schedule;
+  configSteps: ScheduleStep[];
+  costResults?: CostResults;
+}
+
+export interface MultiAppState {
+  apps: ContainerApp[];
+  activeAppId: string | null;
+  selectedRegion: string;
+  estimateName: string;
+  totalCosts?: {
+    weeklyCost: number;
+    monthlyCost: number;
+    yearlyCost: number;
+    totalInstances: number;
+    totalCpuHours: number;
+    totalMemoryHours: number;
+  };
+}
