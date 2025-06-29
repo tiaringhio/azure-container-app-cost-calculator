@@ -1,0 +1,396 @@
+{
+  "lastUpdated": "2024-12-29",
+  "source": "https://azure.microsoft.com/en-us/pricing/details/container-apps/#pricing",
+  "consumptionPlan": {
+    "activeUsage": {
+      "freeAllowances": {
+        "vcpuSeconds": 180000,
+        "memoryGibSeconds": 360000,
+        "requests": 2000000
+      },
+      "pricing": {
+        "vcpu": {
+          "usd": {
+            "perSecond": 0.000024,
+            "perHour": 0.0864,
+            "description": "vCPU usage per second"
+          },
+          "eur": {
+            "perSecond": 0.0000301,
+            "perHour": 0.10836,
+            "description": "vCPU usage per second"
+          }
+        },
+        "memory": {
+          "usd": {
+            "perSecond": 0.000003,
+            "perGibPerSecond": 0.000003,
+            "perGbPerHour": 0.0108,
+            "description": "Memory (GiB) usage per second"
+          },
+          "eur": {
+            "perSecond": 0.0000036,
+            "perGibPerSecond": 0.0000036,
+            "perGbPerHour": 0.01296,
+            "description": "Memory (GiB) usage per second"
+          }
+        }
+      }
+    },
+    "idleUsage": {
+      "pricing": {
+        "vcpu": {
+          "usd": {
+            "perSecond": 0.000003,
+            "perHour": 0.0108
+          },
+          "eur": {
+            "perSecond": 0.0000301,
+            "perHour": 0.10836
+          }
+        },
+        "memory": {
+          "usd": {
+            "perSecond": 0.000003,
+            "perGibPerSecond": 0.000003,
+            "perGbPerHour": 0.0108
+          },
+          "eur": {
+            "perSecond": 0.0000036,
+            "perGibPerSecond": 0.0000036,
+            "perGbPerHour": 0.01296
+          }
+        }
+      }
+    },
+    "requests": {
+      "usd": {
+        "perMillionRequests": 0.40,
+        "freeRequestsPerMonth": 2000000
+      }
+    }
+  },
+  "dedicatedPlan": {
+    "management": {
+      "usd": {
+        "perHour": 0.10
+      }
+    },
+    "compute": {
+      "vcpu": {
+        "usd": {
+          "perHour": 0.0571
+        }
+      },
+      "memory": {
+        "usd": {
+          "perGibPerHour": 0.0050
+        }
+      }
+    }
+  },
+  "regions": {
+    "eastus": {
+      "name": "East US",
+      "multiplier": 1.0,
+      "currency": "USD"
+    },
+    "eastus2": {
+      "name": "East US 2", 
+      "multiplier": 1.0,
+      "currency": "USD"
+    },
+    "westus": {
+      "name": "West US",
+      "multiplier": 1.0,
+      "currency": "USD"
+    },
+    "westus2": {
+      "name": "West US 2",
+      "multiplier": 1.0,
+      "currency": "USD"
+    },
+    "westus3": {
+      "name": "West US 3",
+      "multiplier": 1.0,
+      "currency": "USD"
+    },
+    "centralus": {
+      "name": "Central US",
+      "multiplier": 1.0,
+      "currency": "USD"
+    },
+    "northcentralus": {
+      "name": "North Central US",
+      "multiplier": 1.0,
+      "currency": "USD"
+    },
+    "southcentralus": {
+      "name": "South Central US",
+      "multiplier": 1.0,
+      "currency": "USD"
+    },
+    "westeurope": {
+      "name": "West Europe",
+      "multiplier": 1.0,
+      "currency": "EUR"
+    },
+    "northeurope": {
+      "name": "North Europe",
+      "multiplier": 1.0,
+      "currency": "EUR"
+    },
+    "uksouth": {
+      "name": "UK South",
+      "multiplier": 1.0,
+      "currency": "GBP"
+    },
+    "ukwest": {
+      "name": "UK West",
+      "multiplier": 1.0,
+      "currency": "GBP"
+    },
+    "francecentral": {
+      "name": "France Central",
+      "multiplier": 1.0,
+      "currency": "EUR"
+    },
+    "francesouth": {
+      "name": "France South",
+      "multiplier": 1.0,
+      "currency": "EUR"
+    },
+    "germanywestcentral": {
+      "name": "Germany West Central",
+      "multiplier": 1.0,
+      "currency": "EUR"
+    },
+    "switzerlandnorth": {
+      "name": "Switzerland North",
+      "multiplier": 1.1,
+      "currency": "CHF"
+    },
+    "eastasia": {
+      "name": "East Asia",
+      "multiplier": 1.0,
+      "currency": "USD"
+    },
+    "southeastasia": {
+      "name": "Southeast Asia",
+      "multiplier": 1.0,
+      "currency": "USD"
+    },
+    "japaneast": {
+      "name": "Japan East",
+      "multiplier": 1.0,
+      "currency": "JPY"
+    },
+    "japanwest": {
+      "name": "Japan West",
+      "multiplier": 1.0,
+      "currency": "JPY"
+    },
+    "australiaeast": {
+      "name": "Australia East",
+      "multiplier": 1.0,
+      "currency": "AUD"
+    },
+    "australiasoutheast": {
+      "name": "Australia Southeast",
+      "multiplier": 1.0,
+      "currency": "AUD"
+    },
+    "brazilsouth": {
+      "name": "Brazil South",
+      "multiplier": 1.0,
+      "currency": "BRL"
+    },
+    "canadacentral": {
+      "name": "Canada Central",
+      "multiplier": 1.0,
+      "currency": "CAD"
+    },
+    "canadaeast": {
+      "name": "Canada East",
+      "multiplier": 1.0,
+      "currency": "CAD"
+    },
+    "koreacentral": {
+      "name": "Korea Central",
+      "multiplier": 1.0,
+      "currency": "KRW"
+    },
+    "koreasouth": {
+      "name": "Korea South",
+      "multiplier": 1.0,
+      "currency": "KRW"
+    },
+    "southindia": {
+      "name": "South India",
+      "multiplier": 1.0,
+      "currency": "INR"
+    },
+    "centralindia": {
+      "name": "Central India",
+      "multiplier": 1.0,
+      "currency": "INR"
+    },
+    "westindia": {
+      "name": "West India",
+      "multiplier": 1.0,
+      "currency": "INR"
+    }
+  },
+  "currencies": {
+    "USD": {
+      "symbol": "$",
+      "name": "US Dollar",
+      "rates": {
+        "EUR": 0.85,
+        "GBP": 0.75,
+        "CHF": 0.88,
+        "JPY": 110.0,
+        "AUD": 1.35,
+        "BRL": 5.0,
+        "CAD": 1.25,
+        "KRW": 1200.0,
+        "INR": 75.0
+      }
+    },
+    "EUR": {
+      "symbol": "€",
+      "name": "Euro",
+      "rates": {
+        "USD": 1.18,
+        "GBP": 0.88,
+        "CHF": 1.03,
+        "JPY": 130.0,
+        "AUD": 1.59,
+        "BRL": 5.88,
+        "CAD": 1.47,
+        "KRW": 1412.0,
+        "INR": 88.2
+      }
+    },
+    "GBP": {
+      "symbol": "£",
+      "name": "British Pound",
+      "rates": {
+        "USD": 1.33,
+        "EUR": 1.14,
+        "CHF": 1.17,
+        "JPY": 147.0,
+        "AUD": 1.80,
+        "BRL": 6.67,
+        "CAD": 1.67,
+        "KRW": 1600.0,
+        "INR": 100.0
+      }
+    },
+    "CHF": {
+      "symbol": "CHF",
+      "name": "Swiss Franc",
+      "rates": {
+        "USD": 1.14,
+        "EUR": 0.97,
+        "GBP": 0.85,
+        "JPY": 125.0,
+        "AUD": 1.54,
+        "BRL": 5.70,
+        "CAD": 1.43,
+        "KRW": 1368.0,
+        "INR": 85.3
+      }
+    },
+    "JPY": {
+      "symbol": "¥",
+      "name": "Japanese Yen",
+      "rates": {
+        "USD": 0.0091,
+        "EUR": 0.0077,
+        "GBP": 0.0068,
+        "CHF": 0.008,
+        "AUD": 0.0123,
+        "BRL": 0.0455,
+        "CAD": 0.0114,
+        "KRW": 10.9,
+        "INR": 0.68
+      }
+    },
+    "AUD": {
+      "symbol": "A$",
+      "name": "Australian Dollar",
+      "rates": {
+        "USD": 0.74,
+        "EUR": 0.63,
+        "GBP": 0.56,
+        "CHF": 0.65,
+        "JPY": 81.5,
+        "BRL": 3.70,
+        "CAD": 0.93,
+        "KRW": 888.0,
+        "INR": 55.6
+      }
+    },
+    "BRL": {
+      "symbol": "R$",
+      "name": "Brazilian Real",
+      "rates": {
+        "USD": 0.20,
+        "EUR": 0.17,
+        "GBP": 0.15,
+        "CHF": 0.18,
+        "JPY": 22.0,
+        "AUD": 0.27,
+        "CAD": 0.25,
+        "KRW": 240.0,
+        "INR": 15.0
+      }
+    },
+    "CAD": {
+      "symbol": "C$",
+      "name": "Canadian Dollar",
+      "rates": {
+        "USD": 0.80,
+        "EUR": 0.68,
+        "GBP": 0.60,
+        "CHF": 0.70,
+        "JPY": 88.0,
+        "AUD": 1.08,
+        "BRL": 4.0,
+        "KRW": 960.0,
+        "INR": 60.0
+      }
+    },
+    "KRW": {
+      "symbol": "₩",
+      "name": "South Korean Won",
+      "rates": {
+        "USD": 0.00083,
+        "EUR": 0.00071,
+        "GBP": 0.00063,
+        "CHF": 0.00073,
+        "JPY": 0.092,
+        "AUD": 0.0011,
+        "BRL": 0.0042,
+        "CAD": 0.0010,
+        "INR": 0.063
+      }
+    },
+    "INR": {
+      "symbol": "₹",
+      "name": "Indian Rupee",
+      "rates": {
+        "USD": 0.013,
+        "EUR": 0.011,
+        "GBP": 0.010,
+        "CHF": 0.012,
+        "JPY": 1.47,
+        "AUD": 0.018,
+        "BRL": 0.067,
+        "CAD": 0.017,
+        "KRW": 16.0
+      }
+    }
+  }
+}
