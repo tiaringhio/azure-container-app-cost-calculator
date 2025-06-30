@@ -27,12 +27,12 @@ const initializeDefaultSteps = (): ScheduleStep[] => [
   }
 ];
 
-export const useCalculator = () => {
-  const { pricing } = usePricing();
+export const useCalculator = (region?: string, currency?: string) => {
+  const { pricing, updateRegion: updatePricingRegion, updateCurrency: updatePricingCurrency } = usePricing(region);
   
   const [state, setState] = useState<CalculatorState>({
     selectedCombination: 3, // Default: 1 vCPU, 2 GB
-    selectedRegion: 'westeurope',
+    selectedRegion: region || 'westeurope',
     schedule: initializeSchedule(),
     configSteps: initializeDefaultSteps()
   });
@@ -43,7 +43,12 @@ export const useCalculator = () => {
 
   const updateRegion = useCallback((region: string) => {
     setState(prev => ({ ...prev, selectedRegion: region }));
-  }, []);
+    updatePricingRegion(region);
+  }, [updatePricingRegion]);
+
+  const updateCurrency = useCallback((currency: string) => {
+    updatePricingCurrency(currency);
+  }, [updatePricingCurrency]);
 
   const updateSchedule = useCallback((day: number, hour: number, instances: number) => {
     setState(prev => ({
@@ -274,6 +279,7 @@ export const useCalculator = () => {
     setState,
     updateCombination,
     updateRegion,
+    updateCurrency,
     updateSchedule,
     setSchedulePreset,
     addStep,
@@ -282,7 +288,9 @@ export const useCalculator = () => {
     applySteps,
     calculateCosts,
     getCurrentCombination,
-    getCurrentCost
+    getCurrentCost,
+    // Esponi anche i dati di pricing per l'UI
+    pricing
   };
 };
 

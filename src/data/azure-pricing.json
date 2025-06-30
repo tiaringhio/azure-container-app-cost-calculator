@@ -1,388 +1,626 @@
 {
-  "lastUpdated": "2024-12-29",
-  "source": "https://azure.microsoft.com/en-us/pricing/details/container-apps/#pricing",
+  "totalRecords": 587,
+  "currencies": {
+    "USD": {
+      "name": "USD",
+      "symbol": "$",
+      "displayName": "United States – Dollar ($) USD",
+      "conversion": 1.0,
+      "modernConversion": 1.0
+    },
+    "EUR": {
+      "name": "EUR", 
+      "symbol": "€",
+      "displayName": "Euro Zone – Euro (€) EUR",
+      "conversion": 0.93606,
+      "modernConversion": 0.8847991505928154308971863387
+    },
+    "CHF": {
+      "name": "CHF",
+      "symbol": "CHF ",
+      "displayName": "Switzerland – Franc (chf) CHF", 
+      "conversion": 0.895528,
+      "modernConversion": 0.8261999999896725000001290937
+    },
+    "AUD": {
+      "name": "AUD",
+      "symbol": "$",
+      "displayName": "Australia – Dollar ($) AUD",
+      "conversion": 1.49656,
+      "modernConversion": 1.5566625155666251556662515567
+    },
+    "DKK": {
+      "name": "DKK",
+      "symbol": "kr",
+      "displayName": "Denmark – Krone (kr) DKK",
+      "conversion": 6.98519,
+      "modernConversion": 6.5996999991530604991086877461
+    },
+    "CAD": {
+      "name": "CAD",
+      "symbol": "$",
+      "displayName": "Canada – Dollar ($) CAD",
+      "conversion": 1.3568,
+      "modernConversion": 1.3812499999093554687559485474
+    },
+    "JPY": {
+      "name": "JPY",
+      "symbol": "¥",
+      "displayName": "Japan – Yen (¥) JPY",
+      "conversion": 149.92504,
+      "modernConversion": 144.86500074040501878421005101
+    },
+    "KRW": {
+      "name": "KRW",
+      "symbol": "₩",
+      "displayName": "Korea – Won (₩) KRW",
+      "conversion": 1351.35135,
+      "modernConversion": 1376.1499452980396744029229425
+    },
+    "NZD": {
+      "name": "NZD",
+      "symbol": "$",
+      "displayName": "New Zealand – Dollar ($) NZD",
+      "conversion": 1.61778,
+      "modernConversion": 1.6785564414603441040704993705
+    },
+    "NOK": {
+      "name": "NOK",
+      "symbol": "kr",
+      "displayName": "Norway – Krone (kr) NOK",
+      "conversion": 10.9589,
+      "modernConversion": 10.17074999886519856887661547
+    },
+    "RUB": {
+      "name": "RUB",
+      "symbol": "РУБ",
+      "displayName": "Russia – Ruble (руб) RUB",
+      "conversion": 109.05125,
+      "modernConversion": 79.74999970093750112148437079
+    },
+    "SEK": {
+      "name": "SEK",
+      "symbol": "kr",
+      "displayName": "Sweden – Krona (kr) SEK",
+      "conversion": 11.05094,
+      "modernConversion": 9.637450001969509282402488917
+    },
+    "TWD": {
+      "name": "TWD",
+      "symbol": "NT$",
+      "displayName": "Taiwan – Dollar (NT$) TWD",
+      "conversion": 32.15434,
+      "modernConversion": 29.916499967192070310978816093
+    },
+    "GBP": {
+      "name": "GBP",
+      "symbol": "£",
+      "displayName": "United Kingdom – Pound (£) GBP",
+      "conversion": 0.76896,
+      "modernConversion": 0.7423629412419732006978211648
+    },
+    "INR": {
+      "name": "INR",
+      "symbol": "₹",
+      "displayName": "India – Rupee (₹) INR",
+      "conversion": 83.19468,
+      "modernConversion": 85.35749965758839012358417302
+    },
+    "BRL": {
+      "name": "BRL",
+      "symbol": "R$",
+      "displayName": "Brazil – Real (R$) BRL",
+      "conversion": 5.72574,
+      "modernConversion": 5.6981999985085531323903713031
+    },
+    "ARS": {
+      "name": "ARS",
+      "symbol": "$",
+      "displayName": "Argentina – Peso ($) ARS",
+      "conversion": 125.055,
+      "modernConversion": 125.055
+    },
+    "IDR": {
+      "name": "IDR",
+      "symbol": "Rp",
+      "displayName": "Indonesia – Rupiah (Rp) IDR",
+      "conversion": 15640.0,
+      "modernConversion": 15640.0
+    },
+    "SAR": {
+      "name": "SAR",
+      "symbol": "SR ",
+      "displayName": "Saudi Arabia – Riyal (SR) SAR",
+      "conversion": 3.75,
+      "modernConversion": 3.75
+    },
+    "ZAR": {
+      "name": "ZAR",
+      "symbol": "R ",
+      "displayName": "South Africa  – Rand (R) ZAR",
+      "conversion": 17.78,
+      "modernConversion": 17.78
+    },
+    "TRY": {
+      "name": "TRY",
+      "symbol": "₺ ",
+      "displayName": "Turkey – Lira (TL) TRY",
+      "conversion": 18.1,
+      "modernConversion": 18.1
+    },
+    "MXN": {
+      "name": "MXN",
+      "symbol": "MXN$",
+      "displayName": "Mexico – Peso (MXN$) MXN",
+      "conversion": 21.1,
+      "modernConversion": 21.1
+    },
+    "MYR": {
+      "name": "MYR",
+      "symbol": "RM$",
+      "displayName": "Malaysia – Ringgit (RM$) MYR",
+      "conversion": 4.2,
+      "modernConversion": 4.2
+    },
+    "HKD": {
+      "name": "HKD",
+      "symbol": "HK$",
+      "displayName": "Hong Kong – Dollar (HK$) HKD",
+      "conversion": 7.76,
+      "modernConversion": 7.76
+    }
+  },
+  "dedicatedPlan": {
+    "compute": {
+      "vcpu": {
+        "usd": {
+          "perHour": 0.080859
+        }
+      },
+      "memory": {
+        "usd": {
+          "perGibPerHour": 0.004978
+        }
+      }
+    },
+    "management": {
+      "usd": {
+        "perHour": 0.244
+      }
+    }
+  },
+  "rawApiData": [
+    {
+      "unitOfMeasure": "1 Second",
+      "location": "AU Central",
+      "unitPrice": 3.4E-05,
+      "tierMinimumUnits": 0.0,
+      "region": "australiacentral",
+      "productName": "Azure Container Apps",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2023-09-01T00:00:00Z",
+      "skuName": "Standard",
+      "meterName": "Standard vCPU Active Usage"
+    },
+    {
+      "unitOfMeasure": "1 Hour",
+      "location": "CA East",
+      "unitPrice": 0.216,
+      "tierMinimumUnits": 0.0,
+      "region": "canadaeast",
+      "productName": "Azure Container Apps",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2024-12-01T00:00:00Z",
+      "skuName": "Hybrid",
+      "meterName": "Hybrid vCPU Usage"
+    },
+    {
+      "unitOfMeasure": "1 Second",
+      "location": "AU East",
+      "unitPrice": 3.4E-05,
+      "tierMinimumUnits": 0.0,
+      "region": "australiaeast",
+      "productName": "Azure Container Apps",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2022-06-01T00:00:00Z",
+      "skuName": "Standard",
+      "meterName": "Standard vCPU Active Usage"
+    },
+    {
+      "unitOfMeasure": "1 Second",
+      "location": "AE North",
+      "unitPrice": 3E-06,
+      "tierMinimumUnits": 0.0,
+      "region": "uaenorth",
+      "productName": "Azure Container Apps",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2022-06-01T00:00:00Z",
+      "skuName": "Standard",
+      "meterName": "Standard vCPU Idle Usage"
+    },
+    {
+      "unitOfMeasure": "1 Hour",
+      "location": "AU East",
+      "unitPrice": 0.1,
+      "tierMinimumUnits": 0.0,
+      "region": "australiaeast",
+      "productName": "Azure Container Apps",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2023-08-01T00:00:00Z",
+      "skuName": "Dedicated",
+      "meterName": "Dedicated Plan Management"
+    },
+    {
+      "unitOfMeasure": "1M",
+      "location": "US West Central",
+      "unitPrice": 0.4,
+      "tierMinimumUnits": 0.0,
+      "region": "westcentralus",
+      "productName": "Azure Container Apps",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2022-09-01T00:00:00Z",
+      "skuName": "Standard",
+      "meterName": "Standard Requests"
+    },
+    {
+      "unitOfMeasure": "1 Hour",
+      "location": "AU Southeast",
+      "unitPrice": 0.080859,
+      "tierMinimumUnits": 0.0,
+      "region": "australiasoutheast",
+      "productName": "Azure Container Apps",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2023-09-01T00:00:00Z",
+      "skuName": "Dedicated",
+      "meterName": "Dedicated vCPU Usage"
+    },
+    {
+      "unitOfMeasure": "1M",
+      "location": "AU East",
+      "unitPrice": 0.4,
+      "tierMinimumUnits": 0.0,
+      "region": "australiaeast",
+      "productName": "Azure Container Apps",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2022-06-01T00:00:00Z",
+      "skuName": "Standard",
+      "meterName": "Standard Requests"
+    },
+    {
+      "unitOfMeasure": "1 GiB Second",
+      "location": "US North Central",
+      "unitPrice": 4E-06,
+      "tierMinimumUnits": 0.0,
+      "region": "northcentralus",
+      "productName": "Azure Container Apps",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2022-06-01T00:00:00Z",
+      "skuName": "Standard",
+      "meterName": "Standard Memory Active Usage"
+    },
+    {
+      "unitOfMeasure": "1M",
+      "location": "US East 2",
+      "unitPrice": 0.4,
+      "tierMinimumUnits": 0.0,
+      "region": "eastus2",
+      "productName": "Azure Container Apps",
+      "currencyCode": "USD",
+      "effectiveStartDate": "2022-06-01T00:00:00Z",
+      "skuName": "Standard",
+      "meterName": "Standard Requests"
+    }
+  ],
+  "lastUpdated": "2025-06-30",
+  "source": "Azure Retail Prices API (USD base prices with official currency conversion rates)",
   "consumptionPlan": {
+    "idleUsage": {
+      "pricing": {
+        "vcpu": {
+          "usd": {
+            "description": "vCPU idle usage per second",
+            "perSecond": 3E-06
+          }
+        },
+        "memory": {
+          "usd": {
+            "description": "Memory (GiB) idle usage per second",
+            "perSecond": 4E-07,
+            "perGibPerSecond": 4E-07
+          }
+        }
+      }
+    },
     "activeUsage": {
       "freeAllowances": {
-        "vcpuSeconds": 180000,
         "memoryGibSeconds": 360000,
+        "vcpuSeconds": 180000,
         "requests": 2000000
       },
       "pricing": {
         "vcpu": {
           "usd": {
-            "perSecond": 0.000024,
-            "description": "vCPU usage per second"
-          },
-          "eur": {
-            "perSecond": 0.0000301,
-            "description": "vCPU usage per second"
+            "description": "vCPU usage per second (Standard vCPU Active Usage)",
+            "perSecond": 3.4E-05
           }
         },
         "memory": {
           "usd": {
-            "perSecond": 0.0000301,
-            "perGibPerSecond": 0.000003,
-            "description": "Memory (GiB) usage per second"
-          },
-          "eur": {
-            "perSecond": 0.0000036,
-            "perGibPerSecond": 0.0000036,
-            "description": "Memory (GiB) usage per second"
-          }
-        }
-      }
-    },
-    "idleUsage": {
-      "pricing": {
-        "vcpu": {
-          "usd": {
-            "perSecond": 0.000003
-          },
-          "eur": {
-            "perSecond": 0.0000301
-          }
-        },
-        "memory": {
-          "usd": {
-            "perSecond": 0.000003,
-            "perGibPerSecond": 0.000003
-          },
-          "eur": {
-            "perSecond": 0.0000027,
-            "perGibPerSecond": 0.0000027
+            "description": "Memory (GiB) usage per second (Standard Memory Active Usage)",
+            "perSecond": 4E-06,
+            "perGibPerSecond": 4E-06
           }
         }
       }
     },
     "requests": {
       "usd": {
-        "perMillionRequests": 0.40,
-        "freeRequestsPerMonth": 2000000
+        "freeRequestsPerMonth": 2000000,
+        "perMillionRequests": 400000.0
       }
     }
   },
-  "dedicatedPlan": {
-    "management": {
-      "usd": {
-        "perHour": 0.10
-      }
-    },
-    "compute": {
-      "vcpu": {
-        "usd": {
-          "perHour": 0.0571
-        }
-      },
-      "memory": {
-        "usd": {
-          "perGibPerHour": 0.0050
-        }
-      }
-    }
-  },
+  "apiVersion": "2023-01-01-preview",
   "regions": {
-    "eastus": {
-      "name": "East US",
-      "multiplier": 1.0,
-      "currency": "USD"
-    },
-    "eastus2": {
-      "name": "East US 2", 
-      "multiplier": 1.0,
-      "currency": "USD"
-    },
-    "westus": {
-      "name": "West US",
-      "multiplier": 1.0,
-      "currency": "USD"
-    },
-    "westus2": {
-      "name": "West US 2",
-      "multiplier": 1.0,
-      "currency": "USD"
-    },
-    "westus3": {
-      "name": "West US 3",
-      "multiplier": 1.0,
-      "currency": "USD"
-    },
-    "centralus": {
-      "name": "Central US",
-      "multiplier": 1.0,
-      "currency": "USD"
-    },
-    "northcentralus": {
-      "name": "North Central US",
-      "multiplier": 1.0,
-      "currency": "USD"
-    },
-    "southcentralus": {
-      "name": "South Central US",
-      "multiplier": 1.0,
-      "currency": "USD"
-    },
-    "westeurope": {
-      "name": "West Europe",
-      "multiplier": 1.0,
-      "currency": "EUR"
-    },
-    "northeurope": {
-      "name": "North Europe",
-      "multiplier": 1.0,
-      "currency": "EUR"
-    },
     "uksouth": {
+      "currency": "USD",
       "name": "UK South",
-      "multiplier": 1.0,
-      "currency": "GBP"
-    },
-    "ukwest": {
-      "name": "UK West",
-      "multiplier": 1.0,
-      "currency": "GBP"
+      "multiplier": 1.0
     },
     "francecentral": {
-      "name": "France Central",
-      "multiplier": 1.0,
-      "currency": "EUR"
+      "currency": "USD",
+      "name": "FR Central",
+      "multiplier": 1.0
     },
-    "francesouth": {
-      "name": "France South",
-      "multiplier": 1.0,
-      "currency": "EUR"
-    },
-    "germanywestcentral": {
-      "name": "Germany West Central",
-      "multiplier": 1.0,
-      "currency": "EUR"
-    },
-    "switzerlandnorth": {
-      "name": "Switzerland North",
-      "multiplier": 1.1,
-      "currency": "CHF"
-    },
-    "eastasia": {
-      "name": "East Asia",
-      "multiplier": 1.0,
-      "currency": "USD"
-    },
-    "southeastasia": {
-      "name": "Southeast Asia",
-      "multiplier": 1.0,
-      "currency": "USD"
-    },
-    "japaneast": {
-      "name": "Japan East",
-      "multiplier": 1.0,
-      "currency": "JPY"
-    },
-    "japanwest": {
-      "name": "Japan West",
-      "multiplier": 1.0,
-      "currency": "JPY"
-    },
-    "australiaeast": {
-      "name": "Australia East",
-      "multiplier": 1.0,
-      "currency": "AUD"
-    },
-    "australiasoutheast": {
-      "name": "Australia Southeast",
-      "multiplier": 1.0,
-      "currency": "AUD"
-    },
-    "brazilsouth": {
-      "name": "Brazil South",
-      "multiplier": 1.0,
-      "currency": "BRL"
-    },
-    "canadacentral": {
-      "name": "Canada Central",
-      "multiplier": 1.0,
-      "currency": "CAD"
-    },
-    "canadaeast": {
-      "name": "Canada East",
-      "multiplier": 1.0,
-      "currency": "CAD"
-    },
-    "koreacentral": {
-      "name": "Korea Central",
-      "multiplier": 1.0,
-      "currency": "KRW"
-    },
-    "koreasouth": {
-      "name": "Korea South",
-      "multiplier": 1.0,
-      "currency": "KRW"
+    "eastus2": {
+      "currency": "USD",
+      "name": "US East 2",
+      "multiplier": 1.0
     },
     "southindia": {
-      "name": "South India",
-      "multiplier": 1.0,
-      "currency": "INR"
+      "currency": "USD",
+      "name": "IN South",
+      "multiplier": 1.0
+    },
+    "jioindiawest": {
+      "currency": "USD",
+      "name": "IN West Jio",
+      "multiplier": 1.0
+    },
+    "southcentralus": {
+      "currency": "USD",
+      "name": "US South Central",
+      "multiplier": 1.0
+    },
+    "southeastasia": {
+      "currency": "USD",
+      "name": "AP Southeast",
+      "multiplier": 1.0
+    },
+    "swedencentral": {
+      "currency": "USD",
+      "name": "SE Central",
+      "multiplier": 1.0
     },
     "centralindia": {
-      "name": "Central India",
-      "multiplier": 1.0,
-      "currency": "INR"
+      "currency": "USD",
+      "name": "IN Central",
+      "multiplier": 1.0
+    },
+    "northeurope": {
+      "currency": "USD",
+      "name": "EU North",
+      "multiplier": 1.0
+    },
+    "westus3": {
+      "currency": "USD",
+      "name": "US West 3",
+      "multiplier": 1.0
+    },
+    "australiaeast": {
+      "currency": "USD",
+      "name": "AU East",
+      "multiplier": 1.0
+    },
+    "japanwest": {
+      "currency": "USD",
+      "name": "JA West",
+      "multiplier": 1.0
     },
     "westindia": {
-      "name": "West India",
-      "multiplier": 1.0,
-      "currency": "INR"
-    }
-  },
-  "currencies": {
-    "USD": {
-      "symbol": "$",
-      "name": "US Dollar",
-      "rates": {
-        "EUR": 0.85,
-        "GBP": 0.75,
-        "CHF": 0.88,
-        "JPY": 110.0,
-        "AUD": 1.35,
-        "BRL": 5.0,
-        "CAD": 1.25,
-        "KRW": 1200.0,
-        "INR": 75.0
-      }
+      "currency": "USD",
+      "name": "IN West",
+      "multiplier": 1.0
     },
-    "EUR": {
-      "symbol": "€",
-      "name": "Euro",
-      "rates": {
-        "USD": 1.18,
-        "GBP": 0.88,
-        "CHF": 1.03,
-        "JPY": 130.0,
-        "AUD": 1.59,
-        "BRL": 5.88,
-        "CAD": 1.47,
-        "KRW": 1412.0,
-        "INR": 88.2
-      }
+    "westus": {
+      "currency": "USD",
+      "name": "US West",
+      "multiplier": 1.0
     },
-    "GBP": {
-      "symbol": "£",
-      "name": "British Pound",
-      "rates": {
-        "USD": 1.33,
-        "EUR": 1.14,
-        "CHF": 1.17,
-        "JPY": 147.0,
-        "AUD": 1.80,
-        "BRL": 6.67,
-        "CAD": 1.67,
-        "KRW": 1600.0,
-        "INR": 100.0
-      }
+    "westcentralus": {
+      "currency": "USD",
+      "name": "US West Central",
+      "multiplier": 1.0
     },
-    "CHF": {
-      "symbol": "CHF",
-      "name": "Swiss Franc",
-      "rates": {
-        "USD": 1.14,
-        "EUR": 0.97,
-        "GBP": 0.85,
-        "JPY": 125.0,
-        "AUD": 1.54,
-        "BRL": 5.70,
-        "CAD": 1.43,
-        "KRW": 1368.0,
-        "INR": 85.3
-      }
+    "taiwannorth": {
+      "currency": "USD",
+      "name": "TW North",
+      "multiplier": 1.0
     },
-    "JPY": {
-      "symbol": "¥",
-      "name": "Japanese Yen",
-      "rates": {
-        "USD": 0.0091,
-        "EUR": 0.0077,
-        "GBP": 0.0068,
-        "CHF": 0.008,
-        "AUD": 0.0123,
-        "BRL": 0.0455,
-        "CAD": 0.0114,
-        "KRW": 10.9,
-        "INR": 0.68
-      }
+    "norwayeast": {
+      "currency": "USD",
+      "name": "NO East",
+      "multiplier": 1.0
     },
-    "AUD": {
-      "symbol": "A$",
-      "name": "Australian Dollar",
-      "rates": {
-        "USD": 0.74,
-        "EUR": 0.63,
-        "GBP": 0.56,
-        "CHF": 0.65,
-        "JPY": 81.5,
-        "BRL": 3.70,
-        "CAD": 0.93,
-        "KRW": 888.0,
-        "INR": 55.6
-      }
+    "jioindiacentral": {
+      "currency": "USD",
+      "name": "IN Central Jio",
+      "multiplier": 1.0
     },
-    "BRL": {
-      "symbol": "R$",
-      "name": "Brazilian Real",
-      "rates": {
-        "USD": 0.20,
-        "EUR": 0.17,
-        "GBP": 0.15,
-        "CHF": 0.18,
-        "JPY": 22.0,
-        "AUD": 0.27,
-        "CAD": 0.25,
-        "KRW": 240.0,
-        "INR": 15.0
-      }
+    "canadaeast": {
+      "currency": "USD",
+      "name": "CA East",
+      "multiplier": 1.0
     },
-    "CAD": {
-      "symbol": "C$",
-      "name": "Canadian Dollar",
-      "rates": {
-        "USD": 0.80,
-        "EUR": 0.68,
-        "GBP": 0.60,
-        "CHF": 0.70,
-        "JPY": 88.0,
-        "AUD": 1.08,
-        "BRL": 4.0,
-        "KRW": 960.0,
-        "INR": 60.0
-      }
+    "eastasia": {
+      "currency": "USD",
+      "name": "AP East",
+      "multiplier": 1.0
     },
-    "KRW": {
-      "symbol": "₩",
-      "name": "South Korean Won",
-      "rates": {
-        "USD": 0.00083,
-        "EUR": 0.00071,
-        "GBP": 0.00063,
-        "CHF": 0.00073,
-        "JPY": 0.092,
-        "AUD": 0.0011,
-        "BRL": 0.0042,
-        "CAD": 0.0010,
-        "INR": 0.063
-      }
+    "usgovtexas": {
+      "currency": "USD",
+      "name": "US Gov TX",
+      "multiplier": 1.0
     },
-    "INR": {
-      "symbol": "₹",
-      "name": "Indian Rupee",
-      "rates": {
-        "USD": 0.013,
-        "EUR": 0.011,
-        "GBP": 0.010,
-        "CHF": 0.012,
-        "JPY": 1.47,
-        "AUD": 0.018,
-        "BRL": 0.067,
-        "CAD": 0.017,
-        "KRW": 16.0
-      }
+    "koreasouth": {
+      "currency": "USD",
+      "name": "KR South",
+      "multiplier": 1.0
+    },
+    "francesouth": {
+      "currency": "USD",
+      "name": "FR South",
+      "multiplier": 1.0
+    },
+    "norwaywest": {
+      "currency": "USD",
+      "name": "NO West",
+      "multiplier": 1.0
+    },
+    "westus2": {
+      "currency": "USD",
+      "name": "US West 2",
+      "multiplier": 1.0
+    },
+    "polandcentral": {
+      "currency": "USD",
+      "name": "PL Central",
+      "multiplier": 1.0
+    },
+    "switzerlandnorth": {
+      "currency": "USD",
+      "name": "CH North",
+      "multiplier": 1.0
+    },
+    "northcentralus": {
+      "currency": "USD",
+      "name": "US North Central",
+      "multiplier": 1.0
+    },
+    "centralus": {
+      "currency": "USD",
+      "name": "US Central",
+      "multiplier": 1.0
+    },
+    "italynorth": {
+      "currency": "USD",
+      "name": "IT North",
+      "multiplier": 1.0
+    },
+    "swedensouth": {
+      "currency": "USD",
+      "name": "SE South",
+      "multiplier": 1.0
+    },
+    "brazilsouth": {
+      "currency": "USD",
+      "name": "BR South",
+      "multiplier": 1.0
+    },
+    "australiacentral": {
+      "currency": "USD",
+      "name": "AU Central",
+      "multiplier": 1.0
+    },
+    "australiacentral2": {
+      "currency": "USD",
+      "name": "AU Central 2",
+      "multiplier": 1.0
+    },
+    "eastus": {
+      "currency": "USD",
+      "name": "US East",
+      "multiplier": 1.0
+    },
+    "uaenorth": {
+      "currency": "USD",
+      "name": "AE North",
+      "multiplier": 1.0
+    },
+    "uaecentral": {
+      "currency": "USD",
+      "name": "AE Central",
+      "multiplier": 1.0
+    },
+    "switzerlandwest": {
+      "currency": "USD",
+      "name": "CH West",
+      "multiplier": 1.0
+    },
+    "germanynorth": {
+      "currency": "USD",
+      "name": "DE North",
+      "multiplier": 1.0
+    },
+    "usgovarizona": {
+      "currency": "USD",
+      "name": "US Gov AZ",
+      "multiplier": 1.0
+    },
+    "spaincentral": {
+      "currency": "USD",
+      "name": "ES Central",
+      "multiplier": 1.0
+    },
+    "japaneast": {
+      "currency": "USD",
+      "name": "JA East",
+      "multiplier": 1.0
+    },
+    "westeurope": {
+      "currency": "USD",
+      "name": "EU West",
+      "multiplier": 1.0
+    },
+    "ukwest": {
+      "currency": "USD",
+      "name": "UK West",
+      "multiplier": 1.0
+    },
+    "koreacentral": {
+      "currency": "USD",
+      "name": "KR Central",
+      "multiplier": 1.0
+    },
+    "canadacentral": {
+      "currency": "USD",
+      "name": "CA Central",
+      "multiplier": 1.0
+    },
+    "southafricawest": {
+      "currency": "USD",
+      "name": "ZA West",
+      "multiplier": 1.0
+    },
+    "usgovvirginia": {
+      "currency": "USD",
+      "name": "US Gov Virginia",
+      "multiplier": 1.0
+    },
+    "germanywestcentral": {
+      "currency": "USD",
+      "name": "DE West Central",
+      "multiplier": 1.0
+    },
+    "southafricanorth": {
+      "currency": "USD",
+      "name": "ZA North",
+      "multiplier": 1.0
+    },
+    "australiasoutheast": {
+      "currency": "USD",
+      "name": "AU Southeast",
+      "multiplier": 1.0
     }
   }
 }

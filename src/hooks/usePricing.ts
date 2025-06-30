@@ -17,25 +17,23 @@ export interface UsePricingReturn {
 export const usePricing = (initialRegion = 'westeurope'): UsePricingReturn => {
   const [selectedRegion, setSelectedRegion] = useState(initialRegion);
   
-  // Auto-detect currency from region
-  const regionData = AZURE_REGIONS.find(r => r.value === selectedRegion);
-  const [selectedCurrency, setSelectedCurrency] = useState(regionData?.currency || 'USD');
+  // Valuta indipendente dalla regione - default EUR
+  const [selectedCurrency, setSelectedCurrency] = useState('EUR');
 
   const pricing = useMemo(() => {
     return getDynamicPricing(selectedRegion, selectedCurrency);
   }, [selectedRegion, selectedCurrency]);
 
   const currencySymbol = useMemo(() => {
-    return getCurrencySymbolForRegion(selectedRegion);
-  }, [selectedRegion]);
+    // Usa il simbolo della valuta selezionata, non quello della regione
+    const currencyData = CURRENCIES.find(c => c.code === selectedCurrency);
+    return currencyData?.symbol || '$';
+  }, [selectedCurrency]);
 
   const updateRegion = useCallback((region: string) => {
     setSelectedRegion(region);
-    // Auto-update currency when region changes
-    const newRegionData = AZURE_REGIONS.find(r => r.value === region);
-    if (newRegionData) {
-      setSelectedCurrency(newRegionData.currency);
-    }
+    // NON aggiorniamo più automaticamente la valuta quando cambia la regione
+    // L'utente ora ha il controllo completo della valuta
   }, []);
 
   const updateCurrency = useCallback((currency: string) => {

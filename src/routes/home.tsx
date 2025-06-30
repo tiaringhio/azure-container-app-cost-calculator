@@ -110,7 +110,14 @@ export default function Home() {
   } = useMultiApp();
 
   // Use dynamic pricing with global region
-  const { pricing, getFormattedPrice, updateRegion: updatePricingRegion } = usePricing(multiAppState.selectedRegion);
+  const { 
+    pricing, 
+    getFormattedPrice, 
+    updateRegion: updatePricingRegion, 
+    updateCurrency: updatePricingCurrency,
+    selectedCurrency,
+    selectedRegion: pricingSelectedRegion
+  } = usePricing(multiAppState.selectedRegion);
   
   // Calculator for the active app
   const {
@@ -354,9 +361,10 @@ export default function Home() {
             {/* Region Selector */}
             <RegionSelector
               selectedRegion={multiAppState.selectedRegion}
+              selectedCurrency={selectedCurrency}
               onRegionChange={updateRegion}
+              onCurrencyChange={updatePricingCurrency}
               currencySymbol={pricing.currencySymbol}
-              currency={pricing.currency}
             />
             
             {/* App Manager */}

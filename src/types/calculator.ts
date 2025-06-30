@@ -24,12 +24,16 @@ export interface RegionData {
 export interface CurrencyData {
   symbol: string;
   name: string;
-  rates: Record<string, number>;
+  displayName: string;
+  conversion: number;
+  modernConversion: number;
 }
 
 export interface PricingData {
   lastUpdated: string;
   source: string;
+  apiVersion: string;
+  totalRecords: number;
   consumptionPlan: {
     activeUsage: {
       freeAllowances: {
@@ -43,18 +47,9 @@ export interface PricingData {
             perSecond: number;
             description: string;
           };
-          eur: {
-            perSecond: number;
-            description: string;
-          };
         };
         memory: {
           usd: {
-            perSecond: number;
-            perGibPerSecond: number;
-            description: string;
-          };
-          eur: {
             perSecond: number;
             perGibPerSecond: number;
             description: string;
@@ -67,26 +62,47 @@ export interface PricingData {
         vcpu: {
           usd: {
             perSecond: number;
-          };
-          eur: {
-            perSecond: number;
+            description: string;
           };
         };
         memory: {
           usd: {
             perSecond: number;
             perGibPerSecond: number;
+            description: string;
           };
-          eur: {
-            perSecond: number;
-            perGibPerSecond: number;
-          };
+        };
+      };
+    };
+    requests: {
+      usd: {
+        perMillionRequests: number;
+        freeRequestsPerMonth: number;
+      };
+    };
+  };
+  dedicatedPlan: {
+    management: {
+      usd: {
+        perHour: number;
+      };
+    };
+    compute: {
+      vcpu: {
+        usd: {
+          perHour: number;
+        };
+      };
+      memory: {
+        usd: {
+          perGibPerHour: number;
         };
       };
     };
   };
   regions: Record<string, RegionData>;
   currencies: Record<string, CurrencyData>;
+  rawApiData: Array<any>;
 }
 
 export interface AzureRegion {
@@ -100,6 +116,7 @@ export interface Currency {
   code: string;
   symbol: string;
   name: string;
+  displayName: string;
 }
 
 export interface ScheduleStep {

@@ -4,10 +4,27 @@ import azurePricingData from '../data/azure-pricing.json';
 // Load Azure pricing data from JSON
 const pricingData = azurePricingData as PricingData;
 
+// Funzione helper per convertire prezzi da USD alla valuta target
+const convertFromUSD = (priceUSD: number, toCurrency: string): number => {
+  if (toCurrency === 'USD') return priceUSD;
+  
+  const currencies = pricingData.currencies;
+  const targetCurrency = currencies[toCurrency as keyof typeof currencies];
+  
+  if (!targetCurrency) {
+    console.warn(`Currency ${toCurrency} not found, using USD`);
+    return priceUSD;
+  }
+  
+  // Usa modernConversion come preferenza, poi conversion come fallback
+  const conversionRate = targetCurrency.modernConversion || targetCurrency.conversion;
+  return priceUSD * conversionRate;
+};
+
 // Prezzi Azure Container Apps - Active Usage (Dynamic pricing)
 export const PRICING: PricingConfig = {
-  vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur.perSecond,
-  memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.eur.perGibPerSecond,
+  vcpu_per_second: convertFromUSD(pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd.perSecond, 'EUR'),
+  memory_per_gib_second: convertFromUSD(pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perGibPerSecond, 'EUR'),
   currency: 'EUR',
   currencySymbol: '€',
   regions: Object.fromEntries(
@@ -51,28 +68,9 @@ export const AZURE_REGIONS: AzureRegion[] = Object.entries(pricingData.regions).
 export const CURRENCIES: Currency[] = Object.entries(pricingData.currencies).map(([key, currency]) => ({
   code: key,
   symbol: currency.symbol,
-  name: currency.name
+  name: currency.name,
+  displayName: currency.displayName
 }));
-
-// Funzione helper per convertire prezzi tra valute
-const convertPrice = (price: number, fromCurrency: string, toCurrency: string): number => {
-  if (fromCurrency === toCurrency) return price;
-  
-  const currencies = pricingData.currencies;
-  
-  // Se abbiamo il tasso diretto
-  if (currencies[fromCurrency as keyof typeof currencies]?.rates[toCurrency]) {
-    return price * currencies[fromCurrency as keyof typeof currencies].rates[toCurrency];
-  }
-  
-  // Conversione tramite USD come valuta base
-  if (fromCurrency !== 'USD' && toCurrency !== 'USD') {
-    const toUSD = fromCurrency === 'USD' ? price : price * (currencies[fromCurrency as keyof typeof currencies]?.rates.USD || 1);
-    return toUSD * (currencies.USD?.rates[toCurrency] || 1);
-  }
-  
-  return price;
-};
 
 // Funzione per ottenere il pricing dinamico
 export const getDynamicPricing = (region: string, currency: string): PricingConfig => {
@@ -82,49 +80,36 @@ export const getDynamicPricing = (region: string, currency: string): PricingConf
     console.warn(`Region ${region} not found, using defaults`);
     return {
       ...PRICING,
-      currency: 'EUR',
-      currencySymbol: '€'
+      currency: currency,
+      currencySymbol: pricingData.currencies[currency as keyof typeof pricingData.currencies]?.symbol || '$'
     };
   }
 
-  // Determina la valuta della regione
-  const regionCurrency = regionData.currency;
-  let basePricing;
-
-  // Usa direttamente i prezzi nella valuta della regione se disponibili nel JSON
-  if (regionCurrency === 'EUR' && pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur) {
-    basePricing = {
-      vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur.perSecond,
-      memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.eur.perGibPerSecond,
-      currency: 'EUR'
-    };
-  } else if (regionCurrency === 'USD' && pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd) {
-    basePricing = {
-      vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd.perSecond,
-      memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perGibPerSecond,
-      currency: 'USD'
-    };
-  } else {
-    // Per altre valute, converti da USD
-    const usdPricing = {
-      vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd.perSecond,
-      memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perGibPerSecond,
-    };
-    
-    basePricing = {
-      vcpu_per_second: convertPrice(usdPricing.vcpu_per_second, 'USD', regionCurrency),
-      memory_per_gib_second: convertPrice(usdPricing.memory_per_gib_second, 'USD', regionCurrency),
-      currency: regionCurrency
-    };
-  }
+  // Ottieni i prezzi base USD dall'API
+  const basePricingUSD = {
+    vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd.perSecond,
+    memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perGibPerSecond
+  };
 
   // Applica il moltiplicatore della regione
-  const currencySymbol = pricingData.currencies[basePricing.currency as keyof typeof pricingData.currencies]?.symbol || '$';
+  const regionAdjustedPricingUSD = {
+    vcpu_per_second: basePricingUSD.vcpu_per_second * regionData.multiplier,
+    memory_per_gib_second: basePricingUSD.memory_per_gib_second * regionData.multiplier
+  };
+
+  // Converti nella valuta richiesta dall'utente
+  const finalPricing = {
+    vcpu_per_second: convertFromUSD(regionAdjustedPricingUSD.vcpu_per_second, currency),
+    memory_per_gib_second: convertFromUSD(regionAdjustedPricingUSD.memory_per_gib_second, currency)
+  };
+
+  // Ottieni il simbolo della valuta richiesta
+  const currencySymbol = pricingData.currencies[currency as keyof typeof pricingData.currencies]?.symbol || '$';
   
   return {
-    vcpu_per_second: basePricing.vcpu_per_second * regionData.multiplier,
-    memory_per_gib_second: basePricing.memory_per_gib_second * regionData.multiplier,
-    currency: basePricing.currency,
+    vcpu_per_second: finalPricing.vcpu_per_second,
+    memory_per_gib_second: finalPricing.memory_per_gib_second,
+    currency: currency,
     currencySymbol: currencySymbol,
     regions: Object.fromEntries(
       Object.entries(pricingData.regions).map(([key, region]) => [key, region.multiplier])
