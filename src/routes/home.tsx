@@ -425,80 +425,81 @@ export default function Home() {
         {/* Right Sidebar - Total Summary (Sticky) */}
         <div className="order-3 md:order-3 lg:col-span-3 xl:col-span-3">
           <div className="lg:sticky lg:top-6">
-            {multiAppState.apps.length > 1 && multiAppState.totalCosts && (
-              <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800">
-                <CardHeader className="pb-3">
-                  <div className="space-y-2">
-                    <CardTitle className="text-lg text-blue-900 dark:text-blue-100">
-                      Total Summary
-                    </CardTitle>
-                    <p className="text-sm text-blue-700 dark:text-blue-300">
-                      All {multiAppState.apps.length} apps combined
-                    </p>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="w-full space-y-4">
-                    {/* Weekly */}
-                    <div className="w-full p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
-                      <div className="text-center space-y-2">
-                        <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 break-all">
-                          {getFormattedPrice(multiAppState.totalCosts?.weeklyCost || 0, 2)}
-                        </div>
-                        <div className="text-sm text-blue-700 dark:text-blue-300 font-medium border-t border-blue-200 dark:border-blue-600 pt-2">
-                          Weekly
-                        </div>
+            <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800">
+              <CardHeader className="pb-3">
+                <div className="space-y-2">
+                  <CardTitle className="text-lg text-blue-900 dark:text-blue-100">
+                    Total Summary
+                  </CardTitle>
+                  <p className="text-sm text-blue-700 dark:text-blue-300">
+                    {multiAppState.apps.length === 1 
+                      ? `Current app estimate` 
+                      : `All ${multiAppState.apps.length} apps combined`
+                    }
+                  </p>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="w-full space-y-4">
+                  {/* Weekly */}
+                  <div className="w-full p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
+                    <div className="text-center space-y-2">
+                      <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 break-all">
+                        {getFormattedPrice(multiAppState.totalCosts?.weeklyCost || 0, 2)}
                       </div>
-                    </div>
-                    
-                    {/* Monthly */}
-                    <div className="w-full p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
-                      <div className="text-center space-y-2">
-                        <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 break-all">
-                          {getFormattedPrice(multiAppState.totalCosts?.monthlyCost || 0, 2)}
-                        </div>
-                        <div className="text-sm text-blue-700 dark:text-blue-300 font-medium border-t border-blue-200 dark:border-blue-600 pt-2">
-                          Monthly
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Yearly */}
-                    <div className="w-full p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
-                      <div className="text-center space-y-2">
-                        <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 break-all">
-                          {getFormattedPrice(multiAppState.totalCosts?.yearlyCost || 0, 0)}
-                        </div>
-                        <div className="text-sm text-blue-700 dark:text-blue-300 font-medium border-t border-blue-200 dark:border-blue-600 pt-2">
-                          Yearly
-                        </div>
+                      <div className="text-sm text-blue-700 dark:text-blue-300 font-medium border-t border-blue-200 dark:border-blue-600 pt-2">
+                        Weekly
                       </div>
                     </div>
                   </div>
                   
-                  <div className="pt-4 border-t border-blue-200 dark:border-blue-700">
-                    <div className="text-sm text-blue-600 dark:text-blue-400 space-y-2">
-                      <div className="flex justify-between">
-                        <span>Total Apps:</span>
-                        <span className="font-medium">{multiAppState.apps.length}</span>
+                  {/* Monthly */}
+                  <div className="w-full p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
+                    <div className="text-center space-y-2">
+                      <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 break-all">
+                        {getFormattedPrice(multiAppState.totalCosts?.monthlyCost || 0, 2)}
                       </div>
-                      <div className="flex justify-between">
-                        <span>Peak Instances:</span>
-                        <span className="font-medium">{multiAppState.totalCosts?.totalInstances || 0}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>CPU Hours/Week:</span>
-                        <span className="font-medium">{(multiAppState.totalCosts?.totalCpuHours || 0).toFixed(1)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Memory Hours/Week:</span>
-                        <span className="font-medium">{(multiAppState.totalCosts?.totalMemoryHours || 0).toFixed(1)} GB</span>
+                      <div className="text-sm text-blue-700 dark:text-blue-300 font-medium border-t border-blue-200 dark:border-blue-600 pt-2">
+                        Monthly
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            )}
+                  
+                  {/* Yearly */}
+                  <div className="w-full p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
+                    <div className="text-center space-y-2">
+                      <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 break-all">
+                        {getFormattedPrice(multiAppState.totalCosts?.yearlyCost || 0, 0)}
+                      </div>
+                      <div className="text-sm text-blue-700 dark:text-blue-300 font-medium border-t border-blue-200 dark:border-blue-600 pt-2">
+                        Yearly
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="pt-4 border-t border-blue-200 dark:border-blue-700">
+                  <div className="text-sm text-blue-600 dark:text-blue-400 space-y-2">
+                    <div className="flex justify-between">
+                      <span>Total Apps:</span>
+                      <span className="font-medium">{multiAppState.apps.length}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Peak Instances:</span>
+                      <span className="font-medium">{multiAppState.totalCosts?.totalInstances || 0}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>CPU Hours/Week:</span>
+                      <span className="font-medium">{(multiAppState.totalCosts?.totalCpuHours || 0).toFixed(1)}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Memory Hours/Week:</span>
+                      <span className="font-medium">{(multiAppState.totalCosts?.totalMemoryHours || 0).toFixed(1)} GB</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
