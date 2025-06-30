@@ -24,64 +24,54 @@ export const RegionSelector: React.FC<RegionSelectorProps> = ({
   freeTierEnabled,
   onFreeTierChange
 }) => {
-  const currentRegion = AZURE_REGIONS.find(r => r.value === selectedRegion);
-  const currentCurrency = CURRENCIES.find(c => c.code === selectedCurrency);
-  
   return (
     <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">Region & Currency</CardTitle>
-        <CardDescription>
-          Pricing varies by region. You can view prices in any currency. 
-        </CardDescription>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base">Settings</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="grid grid-cols-1 gap-4">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Azure Region</label>
+      <CardContent className="space-y-3">
+        <div className="grid grid-cols-1 gap-3">
+          <div className="space-y-1">
+            <label className="text-xs font-medium">Azure Region</label>
             <Select value={selectedRegion} onValueChange={onRegionChange}>
-              <SelectTrigger>
+              <SelectTrigger className="h-8">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {AZURE_REGIONS.map((region) => (
                   <SelectItem key={region.value} value={region.value}>
-                    <div className="flex items-center justify-between w-full">
-                      <span>{region.label}</span>
-                    </div>
+                    <span>{region.label}</span>
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
           
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Display Currency</label>
+          <div className="space-y-1">
+            <label className="text-xs font-medium">Display Currency</label>
             <Select value={selectedCurrency} onValueChange={onCurrencyChange}>
-              <SelectTrigger>
+              <SelectTrigger className="h-8">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 {CURRENCIES.map((currency) => (
                   <SelectItem key={currency.code} value={currency.code}>
-                    <div className="flex items-center justify-between w-full">
-                      <span>{currency.displayName}</span>
-                    </div>
+                    <span>{currency.displayName}</span>
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
           
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Free Tier</label>
-            <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-              <div className="space-y-1">
-                <div className="text-sm font-medium text-blue-900 dark:text-blue-100">
+          <div className="space-y-1">
+            <label className="text-xs font-medium">Free Tier</label>
+            <div className="flex items-center justify-between p-2 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <div className="space-y-0">
+                <div className="text-xs font-medium text-blue-900 dark:text-blue-100">
                   Include Azure Free Tier
                 </div>
                 <div className="text-xs text-blue-700 dark:text-blue-300">
-                  180K vCPU-seconds + 360K GiB-seconds monthly
+                  180K vCPU-s + 360K GiB-s monthly
                 </div>
               </div>
               <Switch

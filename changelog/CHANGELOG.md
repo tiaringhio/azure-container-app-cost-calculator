@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.9] - 2025-06-30
+
+### 🎨 Layout & UI Improvements
+- **Compact Layout**: Redesigned right sidebar with more compact Settings and Total Summary sections
+- **Better Space Utilization**: Moved region, currency, and free tier controls to right sidebar above Total Summary
+- **Horizontal Cost Display**: Changed Total Summary from vertical (price above label) to horizontal (label left, price right) layout
+- **Reduced Visual Clutter**: Smaller fonts, tighter spacing, and more efficient use of screen real estate
+- **Single Page Fit**: All summary information now fits on one page without scrolling
+- **Improved Readability**: Maintained readability while maximizing information density
+
+### 🔧 Technical Improvements
+- **Component Refactoring**: Updated RegionSelector component for more compact display
+- **Responsive Design**: Maintained responsive behavior across all screen sizes
+- **Code Cleanup**: Removed temporary test files from repository root
+
+### 🧹 Cleanup
+- **File Organization**: Removed test files from root directory (test-*.mjs files)
+- **Repository Cleanup**: Cleaner project structure with tests properly organized
+
+## [1.0.8] - 2025-06-30
+
+### 🎨 Layout & UI Improvements
+- **Compact Layout**: Redesigned right sidebar with more compact Settings and Total Summary sections
+- **Better Space Utilization**: Moved region, currency, and free tier controls to right sidebar above Total Summary
+- **Horizontal Cost Display**: Changed Total Summary from vertical (price above label) to horizontal (label left, price right) layout
+- **Reduced Visual Clutter**: Smaller fonts, tighter spacing, and more efficient use of screen real estate
+- **Single Page Fit**: All summary information now fits on one page without scrolling
+- **Improved Readability**: Maintained readability while maximizing information density
+
+### 🔧 Technical Improvements
+- **Component Refactoring**: Created new `RegionCurrencyInfo` component for display-only region/currency info
+- **Responsive Design**: Maintained responsive behavior across all screen sizes
+- **Consistent Spacing**: Standardized spacing patterns throughout the application
+
 ## [1.0.7] - 2025-06-30
 
 ### ✨ Azure Free Tier Support

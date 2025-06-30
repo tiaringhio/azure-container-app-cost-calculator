@@ -522,20 +522,9 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-12 xl:grid-cols-12">
-        {/* Left Sidebar - Region & App Management (Sticky) */}
+        {/* Left Side - App Management Only */}
         <div className="order-1 md:order-1 lg:col-span-3 xl:col-span-3">
-          <div className="lg:sticky lg:top-6 space-y-6">
-            {/* Region Selector */}
-            <RegionSelector
-              selectedRegion={multiAppState.selectedRegion}
-              selectedCurrency={selectedCurrency}
-              onRegionChange={updateRegion}
-              onCurrencyChange={updatePricingCurrency}
-              currencySymbol={pricing.currencySymbol}
-              freeTierEnabled={multiAppState.freeTierEnabled}
-              onFreeTierChange={updateFreeTier}
-            />
-            
+          <div className="lg:sticky lg:top-6">
             {/* App Manager */}
             <AppManager
               apps={multiAppState.apps}
@@ -633,23 +622,28 @@ export default function Home() {
           />
         </div>
 
-        {/* Right Sidebar - Total Summary (Sticky) */}
+        {/* Right Sidebar - Region Info & Total Summary (Sticky) */}
         <div className="order-3 md:order-3 lg:col-span-3 xl:col-span-3">
-          <div className="lg:sticky lg:top-6">
+          <div className="lg:sticky lg:top-6 space-y-4">
+            {/* Region & Currency Selector */}
+            <RegionSelector
+              selectedRegion={multiAppState.selectedRegion}
+              selectedCurrency={selectedCurrency}
+              onRegionChange={updateRegion}
+              onCurrencyChange={updatePricingCurrency}
+              currencySymbol={pricing.currencySymbol}
+              freeTierEnabled={multiAppState.freeTierEnabled}
+              onFreeTierChange={updateFreeTier}
+            />
+            
+            {/* Total Summary */}
             <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800">
-              <CardHeader className="pb-3">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg text-blue-900 dark:text-blue-100">
-                      Total Summary
-                    </CardTitle>
-                    {multiAppState.freeTierEnabled && (
-                      <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
-                        ✨ Free Tier
-                      </Badge>
-                    )}
-                  </div>
-                  <p className="text-sm text-blue-700 dark:text-blue-300">
+              <CardHeader className="pb-2">
+                <div className="space-y-1">
+                  <CardTitle className="text-lg text-blue-900 dark:text-blue-100">
+                    Total Summary
+                  </CardTitle>
+                  <p className="text-xs text-blue-700 dark:text-blue-300">
                     {multiAppState.apps.length === 1 
                       ? `Current app estimate` 
                       : `All ${multiAppState.apps.length} apps combined`
@@ -657,68 +651,47 @@ export default function Home() {
                   </p>
                 </div>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="w-full space-y-4">
+              <CardContent className="space-y-4">
+                <div className="w-full space-y-2">
                   {/* Weekly */}
-                  <div className="w-full p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
-                    <div className="text-center space-y-2">
-                      <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 break-all">
-                        {getFormattedPrice(multiAppState.totalCosts?.weeklyCost || 0, 2)}
-                      </div>
-                      <div className="text-sm text-blue-700 dark:text-blue-300 font-medium border-t border-blue-200 dark:border-blue-600 pt-2">
+                  <div className="w-full p-3 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm text-blue-700 dark:text-blue-300 font-medium">
                         Weekly
+                      </div>
+                      <div className="text-lg font-bold text-blue-900 dark:text-blue-100">
+                        {getFormattedPrice(multiAppState.totalCosts?.weeklyCost || 0, 2)}
                       </div>
                     </div>
                   </div>
                   
                   {/* Monthly */}
-                  <div className="w-full p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
-                    <div className="text-center space-y-2">
-                      <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 break-all">
-                        {getFormattedPrice(multiAppState.totalCosts?.monthlyCost || 0, 2)}
-                      </div>
-                      <div className="text-sm text-blue-700 dark:text-blue-300 font-medium border-t border-blue-200 dark:border-blue-600 pt-2">
+                  <div className="w-full p-3 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm text-blue-700 dark:text-blue-300 font-medium">
                         Monthly
+                      </div>
+                      <div className="text-lg font-bold text-blue-900 dark:text-blue-100">
+                        {getFormattedPrice(multiAppState.totalCosts?.monthlyCost || 0, 2)}
                       </div>
                     </div>
                   </div>
                   
                   {/* Yearly */}
-                  <div className="w-full p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
-                    <div className="text-center space-y-2">
-                      <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 break-all">
-                        {getFormattedPrice(multiAppState.totalCosts?.yearlyCost || 0, 0)}
-                      </div>
-                      <div className="text-sm text-blue-700 dark:text-blue-300 font-medium border-t border-blue-200 dark:border-blue-600 pt-2">
+                  <div className="w-full p-3 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
+                    <div className="flex items-center justify-between">
+                      <div className="text-sm text-blue-700 dark:text-blue-300 font-medium">
                         Yearly
                       </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="pt-4 border-t border-blue-200 dark:border-blue-700">
-                  <div className="text-sm text-blue-600 dark:text-blue-400 space-y-2">
-                    <div className="flex justify-between">
-                      <span>Total Apps:</span>
-                      <span className="font-medium">{multiAppState.apps.length}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Peak Instances:</span>
-                      <span className="font-medium">{multiAppState.totalCosts?.totalInstances || 0}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>CPU Hours/Week:</span>
-                      <span className="font-medium">{(multiAppState.totalCosts?.totalCpuHours || 0).toFixed(1)}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Memory Hours/Week:</span>
-                      <span className="font-medium">{(multiAppState.totalCosts?.totalMemoryHours || 0).toFixed(1)} GB</span>
+                      <div className="text-lg font-bold text-blue-900 dark:text-blue-100">
+                        {getFormattedPrice(multiAppState.totalCosts?.yearlyCost || 0, 0)}
+                      </div>
                     </div>
                   </div>
                 </div>
                 
                 {/* Export Buttons */}
-                <div className="pt-4 border-t border-blue-200 dark:border-blue-700 space-y-2">
+                <div className="pt-3 border-t border-blue-200 dark:border-blue-700 space-y-2">
                   <Button
                     onClick={() => exportToCSV(
                       multiAppState.apps,
