@@ -5,6 +5,18 @@ Tutte le modifiche significative a questo progetto saranno documentate in questo
 Il formato è basato su [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 e questo progetto aderisce al [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] - 2025-06-30
+
+### 🐛 Fixed
+- **CRITICAL**: Risolti errori build CI dovuti a conflitti dipendenze Vite/Vitest
+- Sincronizzato package-lock.json con package.json per compatibilità `npm ci`
+- Aggiornate dipendenze devDependencies per compatibilità:
+  - Vitest: 3.2.4 → 1.6.0 (compatibile con Vite 4.x)
+  - @vitest/ui: 3.2.4 → 1.6.0
+  - jsdom: 26.1.0 → 24.1.0
+  - @vitejs/plugin-react: aggiornato a 4.3.1
+- Configurazione vitest.config.ts: rimosso `globals: true`, impostato `environment: 'jsdom'`
+
 ## [1.0.1] - 2025-06-30
 
 ### 🐛 Fixed
