@@ -2,7 +2,7 @@
 
 A modern, interactive cost calculator for Azure Container Apps built with React, Vite, TypeScript, and TailwindCSS. Calculate accurate costs with official Azure pricing, support for multiple regions and currencies, and advanced scheduling capabilities.
 
-![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -54,6 +54,13 @@ A modern, interactive cost calculator for Azure Container Apps built with React,
 - Total cost aggregation across all apps
 - Export and comparison capabilities
 
+### 📤 **Export & Reporting**
+- **CSV Export**: Detailed cost breakdown with custom filenames
+- **PDF Export**: Professional reports with weekly, monthly, yearly costs
+- **Consultation Mode**: PDF opens in new tab for review before printing
+- **Unified Formatting**: 2-decimal precision for consistency across exports
+- **Complete Cost Periods**: All time projections included in exports
+
 ## 🚀 Quick Start
 
 ### Prerequisites
@@ -83,7 +90,7 @@ npm run preview
 
 ## 🧪 Testing
 
-The project includes a comprehensive test suite with 54 tests covering:
+The project includes a comprehensive test suite with 79 tests covering:
 
 ```bash
 # Run all tests
@@ -101,10 +108,12 @@ npm run test:coverage
 
 ### Test Coverage
 - **Pricing validation**: Official Azure pricing accuracy
-- **Currency conversions**: 25+ supported currencies
+- **Currency conversions**: 25+ supported currencies  
 - **Region support**: 55+ Azure regions
 - **Cost calculations**: Realistic scenarios and edge cases
 - **Free tier**: Accurate allowance calculations
+- **CSV Export**: File generation, formatting, and edge cases
+- **PDF Export**: HTML generation, cost periods, consultation mode
 - **Integration**: End-to-end workflows
 
 ## 🏗️ Technical Architecture
@@ -198,15 +207,6 @@ The calculator is fully responsive featuring:
 
 ## 🔧 Configuration
 
-### Environment Variables
-```bash
-# Optional: Custom API endpoints
-VITE_AZURE_PRICING_API=your-api-endpoint
-
-# Optional: Analytics tracking
-VITE_ANALYTICS_ID=your-analytics-id
-```
-
 ### Pricing Data Updates
 The pricing data is stored in `src/data/azure-pricing.json` and can be updated using:
 ```bash
@@ -225,6 +225,12 @@ The calculator provides detailed insights including:
 - **Time-based analysis** (hourly, daily, weekly patterns)
 - **Regional cost comparisons**
 - **Currency impact analysis**
+
+### Export Capabilities
+- **CSV Reports**: Detailed cost data with custom filenames
+- **PDF Reports**: Professional documents with all cost periods
+- **Consultation Mode**: Review reports before printing
+- **Consistent Formatting**: 2-decimal precision across all exports
 
 ## 🤝 Contributing
 
@@ -258,8 +264,8 @@ Please use GitHub Issues to report bugs or request features:
 
 - [ ] Azure Dedicated plan support
 - [ ] API integration for real-time pricing
-- [ x ] Export to CSV functionality
-- [ ] Export to PDF functionality
+- [x] Export to CSV functionality ✅ **v1.0.4**
+- [x] Export to PDF functionality ✅ **v1.0.6**
 - [ ] Advanced scheduling patterns
 - [ ] Cost optimization recommendations
 - [ ] Team collaboration features
