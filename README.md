@@ -2,7 +2,7 @@
 
 A modern, interactive cost calculator for Azure Container Apps built with React, Vite, TypeScript, and TailwindCSS. Calculate accurate costs with official Azure pricing, support for multiple regions and currencies, and advanced scheduling capabilities.
 
-![Version](https://img.shields.io/badge/version-1.0.2-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
