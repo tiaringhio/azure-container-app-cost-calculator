@@ -11,6 +11,7 @@ import { RegionSelector } from '../components/calculator/RegionSelector';
 import { AppManager } from '../components/calculator/AppManager';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
+import { Badge } from '../components/ui/badge';
 import { ThemeToggle } from '../components/ui/theme-toggle';
 import { Download, FileText } from 'lucide-react';
 import { usePricing } from '../hooks/usePricing';
@@ -24,6 +25,7 @@ const exportToCSV = (
   totalCosts: any,
   estimateName: string,
   selectedRegion: string,
+  freeTierEnabled: boolean,
   getFormattedPrice: (amount: number, decimals?: number) => string
 ) => {
   const now = new Date();
@@ -98,6 +100,7 @@ const exportToCSV = (
     ['Export Details'],
     ['Estimate Name', estimateName],
     ['Region', selectedRegion],
+    ['Free Tier Enabled', freeTierEnabled ? 'Yes' : 'No'],
     ['Export Date', timestamp],
     ['Total Apps', apps.length.toString()],
     [''],
@@ -165,7 +168,8 @@ const calculateAppCosts = (
   selectedRegion: string, 
   vcpuPricePerHour: number,  // Calculated from per-second * 3600
   memoryPricePerHour: number, // Calculated from per-second * 3600
-  regionMultiplier: number = 1.0
+  regionMultiplier: number = 1.0,
+  freeTierEnabled: boolean = false
 ): CostResults => {
   const combo = VALID_COMBINATIONS[app.selectedCombination];
   const vcpu = combo.cpu;
@@ -192,9 +196,25 @@ const calculateAppCosts = (
     }
   }
 
-  // Cost per hour per single active instance
-  const vcpuCostPerHour = vcpu * vcpuPricePerHour * regionMultiplier;
-  const memoryCostPerHour = memory * memoryPricePerHour * regionMultiplier;
+  // Calculate monthly usage in seconds
+  const monthlyVcpuSeconds = totalActiveInstanceHours * 4.33 * vcpu * 3600; // hours to seconds
+  const monthlyMemoryGibSeconds = totalActiveInstanceHours * 4.33 * memory * 3600; // hours to seconds
+  
+  let billableVcpuSeconds = monthlyVcpuSeconds;
+  let billableMemoryGibSeconds = monthlyMemoryGibSeconds;
+  
+  // Apply free tier if enabled
+  if (freeTierEnabled) {
+    const freeVcpuSeconds = 180000; // From azure-pricing.json
+    const freeMemoryGibSeconds = 360000; // From azure-pricing.json
+    
+    billableVcpuSeconds = Math.max(0, monthlyVcpuSeconds - freeVcpuSeconds);
+    billableMemoryGibSeconds = Math.max(0, monthlyMemoryGibSeconds - freeMemoryGibSeconds);
+  }
+
+  // Cost per hour per single active instance (adjusted for free tier)
+  const vcpuCostPerHour = (billableVcpuSeconds / (monthlyVcpuSeconds || 1)) * vcpu * vcpuPricePerHour * regionMultiplier;
+  const memoryCostPerHour = (billableMemoryGibSeconds / (monthlyMemoryGibSeconds || 1)) * memory * memoryPricePerHour * regionMultiplier;
   const totalCostPerInstancePerHour = vcpuCostPerHour + memoryCostPerHour;
 
   // Weekly and monthly costs
@@ -249,6 +269,7 @@ export default function Home() {
     updateAppSteps,
     updateRegion,
     updateEstimateName,
+    updateFreeTier,
     updateTotalCosts
   } = useMultiApp();
 
@@ -375,7 +396,8 @@ export default function Home() {
             multiAppState.selectedRegion, 
             pricing.vcpu_per_second * 3600, 
             pricing.memory_per_gib_second * 3600, 
-            pricing.regions[multiAppState.selectedRegion] || 1.0
+            pricing.regions[multiAppState.selectedRegion] || 1.0,
+            multiAppState.freeTierEnabled
           );
           
           totalWeeklyCost += costs.weeklyCost;
@@ -411,6 +433,7 @@ export default function Home() {
   }, [
     multiAppState.apps.length,
     multiAppState.selectedRegion,
+    multiAppState.freeTierEnabled,
     pricing,
     updateTotalCosts,
     // Aggiungi una dipendenza che cambierà quando le app vengono modificate
@@ -453,7 +476,8 @@ export default function Home() {
       multiAppState.selectedRegion,
       pricing.vcpu_per_second * 3600,
       pricing.memory_per_gib_second * 3600,
-      pricing.regions[multiAppState.selectedRegion] || 1.0
+      pricing.regions[multiAppState.selectedRegion] || 1.0,
+      multiAppState.freeTierEnabled
     );
   }, [activeApp, multiAppState.selectedRegion, pricing, state.selectedCombination, state.schedule]);
   
@@ -508,6 +532,8 @@ export default function Home() {
               onRegionChange={updateRegion}
               onCurrencyChange={updatePricingCurrency}
               currencySymbol={pricing.currencySymbol}
+              freeTierEnabled={multiAppState.freeTierEnabled}
+              onFreeTierChange={updateFreeTier}
             />
             
             {/* App Manager */}
@@ -601,6 +627,7 @@ export default function Home() {
             currentCombination={currentCombination}
             schedule={state.schedule}
             selectedRegion={multiAppState.selectedRegion}
+            freeTierEnabled={multiAppState.freeTierEnabled}
             getFormattedPrice={getFormattedPrice}
             pricing={pricing}
           />
@@ -612,9 +639,16 @@ export default function Home() {
             <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-blue-200 dark:border-blue-800">
               <CardHeader className="pb-3">
                 <div className="space-y-2">
-                  <CardTitle className="text-lg text-blue-900 dark:text-blue-100">
-                    Total Summary
-                  </CardTitle>
+                  <div className="flex items-center justify-between">
+                    <CardTitle className="text-lg text-blue-900 dark:text-blue-100">
+                      Total Summary
+                    </CardTitle>
+                    {multiAppState.freeTierEnabled && (
+                      <Badge variant="secondary" className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                        ✨ Free Tier
+                      </Badge>
+                    )}
+                  </div>
                   <p className="text-sm text-blue-700 dark:text-blue-300">
                     {multiAppState.apps.length === 1 
                       ? `Current app estimate` 
@@ -691,6 +725,7 @@ export default function Home() {
                       multiAppState.totalCosts,
                       multiAppState.estimateName || 'Azure Container Apps Estimate',
                       multiAppState.selectedRegion,
+                      multiAppState.freeTierEnabled,
                       getFormattedPrice
                     )}
                     className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white"
@@ -712,6 +747,7 @@ export default function Home() {
                         appsForExport, 
                         pricingForExport, 
                         multiAppState.estimateName,
+                        multiAppState.freeTierEnabled,
                         multiAppState.totalCosts
                       );
                     }}

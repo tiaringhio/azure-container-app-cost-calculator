@@ -169,6 +169,7 @@ export interface MultiAppState {
   activeAppId: string | null;
   selectedRegion: string;
   estimateName: string;
+  freeTierEnabled: boolean;
   totalCosts?: {
     weeklyCost: number;
     monthlyCost: number;

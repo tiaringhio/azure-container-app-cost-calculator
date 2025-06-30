@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import { Badge } from '../ui/badge';
+import { Switch } from '../ui/switch';
 import { AZURE_REGIONS, CURRENCIES } from '../../lib/constants';
 
 interface RegionSelectorProps {
@@ -10,6 +11,8 @@ interface RegionSelectorProps {
   onRegionChange: (region: string) => void;
   onCurrencyChange: (currency: string) => void;
   currencySymbol: string;
+  freeTierEnabled: boolean;
+  onFreeTierChange: (enabled: boolean) => void;
 }
 
 export const RegionSelector: React.FC<RegionSelectorProps> = ({
@@ -17,7 +20,9 @@ export const RegionSelector: React.FC<RegionSelectorProps> = ({
   selectedCurrency,
   onRegionChange,
   onCurrencyChange,
-  currencySymbol
+  currencySymbol,
+  freeTierEnabled,
+  onFreeTierChange
 }) => {
   const currentRegion = AZURE_REGIONS.find(r => r.value === selectedRegion);
   const currentCurrency = CURRENCIES.find(c => c.code === selectedCurrency);
@@ -67,13 +72,24 @@ export const RegionSelector: React.FC<RegionSelectorProps> = ({
               </SelectContent>
             </Select>
           </div>
-        </div>
-        
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span>
-            Prices are calculated for <strong>{currentRegion?.label}</strong> region 
-            and converted to <strong>{currentCurrency?.displayName}</strong> using current exchange rates.
-          </span>
+          
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Free Tier</label>
+            <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+              <div className="space-y-1">
+                <div className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                  Include Azure Free Tier
+                </div>
+                <div className="text-xs text-blue-700 dark:text-blue-300">
+                  180K vCPU-seconds + 360K GiB-seconds monthly
+                </div>
+              </div>
+              <Switch
+                checked={freeTierEnabled}
+                onCheckedChange={onFreeTierChange}
+              />
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>

@@ -2,7 +2,7 @@
 
 A modern, interactive cost calculator for Azure Container Apps built with React, Vite, TypeScript, and TailwindCSS. Calculate accurate costs with official Azure pricing, support for multiple regions and currencies, and advanced scheduling capabilities.
 
-![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)
+![Version](https://img.shields.io/badge/version-1.0.7-blue.svg)
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
@@ -12,6 +12,7 @@ A modern, interactive cost calculator for Azure Container Apps built with React,
 - Official Azure Container Apps 2025 pricing
 - Per-second precision with transparent formula display
 - Zero-scale support (0 instances = $0.00)
+- **Azure Free Tier support** with toggle control
 - Multi-currency support (USD, EUR, GBP, JPY, CHF, etc.)
 - Time projections: daily, weekly, monthly, yearly
 - Detailed CPU and memory cost breakdown
@@ -90,7 +91,7 @@ npm run preview
 
 ## 🧪 Testing
 
-The project includes a comprehensive test suite with 79 tests covering:
+The project includes a comprehensive test suite with 94 tests covering:
 
 ```bash
 # Run all tests
@@ -111,9 +112,9 @@ npm run test:coverage
 - **Currency conversions**: 25+ supported currencies  
 - **Region support**: 55+ Azure regions
 - **Cost calculations**: Realistic scenarios and edge cases
-- **Free tier**: Accurate allowance calculations
-- **CSV Export**: File generation, formatting, and edge cases
-- **PDF Export**: HTML generation, cost periods, consultation mode
+- **Free tier**: Accurate allowance calculations and cost reductions
+- **CSV Export**: File generation, formatting, and edge cases with free tier indicators
+- **PDF Export**: HTML generation, cost periods, consultation mode with free tier status
 - **Integration**: End-to-end workflows
 
 ## 🏗️ Technical Architecture
@@ -168,6 +169,7 @@ npm run test:coverage # Run tests with coverage
 - **vCPU**: $0.000004 per second ($0.1008 per hour)
 - **Memory**: $0.000004 per GiB per second ($0.0144 per GiB per hour)
 - **Free tier**: 180,000 vCPU-seconds and 360,000 GiB-seconds per month
+- **Free tier toggle**: Enable/disable free tier calculations in Region & Currency panel
 - **Billing**: Per-second precision, pay only for active usage
 
 ### Supported Regions & Currencies

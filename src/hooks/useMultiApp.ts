@@ -44,6 +44,10 @@ const getInitialState = (): MultiAppState => {
         if (!parsed.estimateName) {
           parsed.estimateName = 'Container Apps';
         }
+        // Aggiungi freeTierEnabled se non esiste (backward compatibility)
+        if (parsed.freeTierEnabled === undefined) {
+          parsed.freeTierEnabled = true;
+        }
         return parsed;
       }
     }
@@ -64,7 +68,8 @@ const getInitialState = (): MultiAppState => {
     }],
     activeAppId: defaultAppId,
     selectedRegion: 'westeurope',
-    estimateName: 'Container Apps'
+    estimateName: 'Container Apps',
+    freeTierEnabled: true
   };
 };
 
@@ -81,6 +86,7 @@ export interface UseMultiAppReturn {
   updateAppSteps: (appId: string, steps: ScheduleStep[]) => void;
   updateRegion: (region: string) => void;
   updateEstimateName: (name: string) => void;
+  updateFreeTier: (enabled: boolean) => void;
   updateTotalCosts: (totalCosts: MultiAppState['totalCosts']) => void;
   clearAllData: () => void;
 }
@@ -198,6 +204,14 @@ export const useMultiApp = (): UseMultiAppReturn => {
     }));
   }, []);
 
+  // Aggiorna lo stato del free tier
+  const updateFreeTier = useCallback((enabled: boolean) => {
+    setState(prev => ({
+      ...prev,
+      freeTierEnabled: enabled
+    }));
+  }, []);
+
   // Aggiorna i costi totali
   const updateTotalCosts = useCallback((totalCosts: MultiAppState['totalCosts']) => {
     setState(prev => ({
@@ -226,6 +240,7 @@ export const useMultiApp = (): UseMultiAppReturn => {
     updateAppSteps,
     updateRegion,
     updateEstimateName,
+    updateFreeTier,
     updateTotalCosts,
     clearAllData
   };

@@ -69,7 +69,7 @@ describe('PDF Export Functionality', () => {
       currency: 'USD'
     };
 
-    const html = generatePrintableHTML(apps, pricing, 'Test Estimate');
+    const html = generatePrintableHTML(apps, pricing, 'Test Estimate', false);
     
     // Check basic HTML structure
     expect(html).toContain('<!DOCTYPE html>');
@@ -101,7 +101,7 @@ describe('PDF Export Functionality', () => {
       currency: 'EUR'
     };
 
-    const html = generatePrintableHTML(apps, pricing, 'Production Estimate');
+    const html = generatePrintableHTML(apps, pricing, 'Production Estimate', false);
     
     // Check app details in table
     expect(html).toContain('Production API');
@@ -131,7 +131,7 @@ describe('PDF Export Functionality', () => {
       currency: 'USD'
     };
 
-    const html = generatePrintableHTML(apps, pricing, 'Cost Test');
+    const html = generatePrintableHTML(apps, pricing, 'Cost Test', false);
     
     // Calculate expected costs
     const totalInstanceHours = 24; // 24 instances (1 instance per hour for 24 hours)
@@ -173,7 +173,7 @@ describe('PDF Export Functionality', () => {
       currency: 'USD'
     };
 
-    const html = generatePrintableHTML(apps, pricing, 'Multi-App Test');
+    const html = generatePrintableHTML(apps, pricing, 'Multi-App Test', false);
     
     // Check both apps are present
     expect(html).toContain('Web Frontend');
@@ -194,7 +194,7 @@ describe('PDF Export Functionality', () => {
       currency: 'USD'
     };
 
-    const html = generatePrintableHTML(apps, pricing, 'Empty Test');
+    const html = generatePrintableHTML(apps, pricing, 'Empty Test', false);
     
     // Should still generate valid HTML
     expect(html).toContain('Empty Test');
@@ -218,7 +218,7 @@ describe('PDF Export Functionality', () => {
       currency: 'EUR'
     };
 
-    const html = generatePrintableHTML(apps, pricing, 'Metadata Test');
+    const html = generatePrintableHTML(apps, pricing, 'Metadata Test', false);
     
     // Check metadata
     expect(html).toContain('Generated on');
@@ -352,7 +352,7 @@ describe('PDF Export Functionality', () => {
       currency: 'USD'
     };
 
-    const html = generatePrintableHTML(apps, pricing, 'Precision Test');
+    const html = generatePrintableHTML(apps, pricing, 'Precision Test', false);
     
     // Check costs are formatted to 4 decimal places
     const costMatches = html.match(/\d+\.\d{4}/g);
@@ -384,7 +384,7 @@ describe('PDF Export Functionality', () => {
       totalMemoryHours: 672
     };
 
-    const html = generatePrintableHTML(apps, pricing, 'Cost Periods Test', totalCosts);
+    const html = generatePrintableHTML(apps, pricing, 'Cost Periods Test', false, totalCosts);
     
     // Check that all cost periods are included
     expect(html).toContain('Weekly Total:');
@@ -411,7 +411,7 @@ describe('PDF Export Functionality', () => {
       currency: 'USD'
     };
 
-    const html = generatePrintableHTML(apps, pricing, 'No Total Costs Test');
+    const html = generatePrintableHTML(apps, pricing, 'No Total Costs Test', false);
     
     // Should only contain weekly costs, not monthly/yearly
     expect(html).toContain('Weekly Total:');
@@ -443,7 +443,7 @@ describe('PDF Export Functionality', () => {
       totalMemoryHours: 168
     };
 
-    exportToPDF(apps, pricing, 'PDF Total Costs Test', totalCosts);
+    exportToPDF(apps, pricing, 'PDF Total Costs Test', false, totalCosts);
 
     // Verify window.open was called
     expect(mockOpen).toHaveBeenCalledWith('', '_blank');
@@ -455,5 +455,150 @@ describe('PDF Export Functionality', () => {
     expect(writtenContent).toContain('217.58 USD');
     expect(writtenContent).toContain('Yearly Total:');
     expect(writtenContent).toContain('2613 USD');
+  });
+
+  describe('Free Tier Integration with PDF Export', () => {
+    it('should include free tier status when enabled in PDF', () => {
+      const apps: AppData[] = [{
+        name: 'Test App',
+        cpu: 1,
+        memory: 2,
+        region: 'westeurope',
+        schedule: [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+      }];
+
+      const pricing: PricingData = {
+        vcpu: { perSecond: 0.000004 },
+        memory: { perGibPerSecond: 0.000004 },
+        currency: 'USD'
+      };
+
+      const html = generatePrintableHTML(apps, pricing, 'Test Estimate', true);
+
+      expect(html).toContain('Azure Free Tier:');
+      expect(html).toContain('✓ Enabled');
+      expect(html).toContain('text-green-600');
+    });
+
+    it('should include free tier status when disabled in PDF', () => {
+      const apps: AppData[] = [{
+        name: 'Test App',
+        cpu: 1,
+        memory: 2,
+        region: 'westeurope',
+        schedule: [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+      }];
+
+      const pricing: PricingData = {
+        vcpu: { perSecond: 0.000004 },
+        memory: { perGibPerSecond: 0.000004 },
+        currency: 'USD'
+      };
+
+      const html = generatePrintableHTML(apps, pricing, 'Test Estimate', false);
+
+      expect(html).toContain('Azure Free Tier:');
+      expect(html).toContain('✗ Disabled');
+      expect(html).toContain('text-gray-600');
+    });
+
+    it('should call exportToPDF with correct free tier parameter', () => {
+      const apps: AppData[] = [{
+        name: 'Test App',
+        cpu: 1,
+        memory: 2,
+        region: 'westeurope',
+        schedule: [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+      }];
+
+      const pricing: PricingData = {
+        vcpu: { perSecond: 0.000004 },
+        memory: { perGibPerSecond: 0.000004 },
+        currency: 'USD'
+      };
+
+      const totalCosts = {
+        weeklyCost: 50.25,
+        monthlyCost: 217.58,
+        yearlyCost: 2610.96,
+        totalInstances: 5,
+        totalCpuHours: 168,
+        totalMemoryHours: 336
+      };
+
+      exportToPDF(apps, pricing, 'Test Estimate', true, totalCosts);
+
+      expect(mockOpen).toHaveBeenCalledWith('', '_blank');
+      expect(mockWindow.document.write).toHaveBeenCalled();
+      
+      const writtenContent = mockWindow.document.write.mock.calls[0][0];
+      expect(writtenContent).toContain('✓ Enabled');
+      expect(writtenContent).toContain('text-green-600');
+    });
+
+    it('should maintain existing PDF structure with free tier information', () => {
+      const apps: AppData[] = [{
+        name: 'Test App',
+        cpu: 1,
+        memory: 2,
+        region: 'westeurope',
+        schedule: [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+      }];
+
+      const pricing: PricingData = {
+        vcpu: { perSecond: 0.000004 },
+        memory: { perGibPerSecond: 0.000004 },
+        currency: 'USD'
+      };
+
+      const html = generatePrintableHTML(apps, pricing, 'Test Estimate', true);
+
+      // Check that all existing elements are still present
+      expect(html).toContain('Test Estimate');
+      expect(html).toContain('Azure Container Apps Cost Estimate');
+      expect(html).toContain('Estimate Summary');
+      expect(html).toContain('Cost Breakdown');
+      expect(html).toContain('Total Applications:');
+      expect(html).toContain('Total Instance Hours:');
+      expect(html).toContain('Currency:');
+      
+      // Check that free tier information is added
+      expect(html).toContain('Azure Free Tier:');
+      expect(html).toContain('✓ Enabled');
+    });
+
+    it('should handle free tier in PDF with total costs provided', () => {
+      const apps: AppData[] = [{
+        name: 'Test App',
+        cpu: 1,
+        memory: 2,
+        region: 'westeurope',
+        schedule: [[1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
+      }];
+
+      const pricing: PricingData = {
+        vcpu: { perSecond: 0.000004 },
+        memory: { perGibPerSecond: 0.000004 },
+        currency: 'USD'
+      };
+
+      const totalCosts = {
+        weeklyCost: 50.25,
+        monthlyCost: 217.58,
+        yearlyCost: 2610.96,
+        totalInstances: 5,
+        totalCpuHours: 168,
+        totalMemoryHours: 336
+      };
+
+      const html = generatePrintableHTML(apps, pricing, 'Test Estimate', true, totalCosts);
+
+      expect(html).toContain('Azure Free Tier:');
+      expect(html).toContain('✓ Enabled');
+      expect(html).toContain('Monthly Total:');
+      expect(html).toContain('217.58 USD');
+      expect(html).toContain('Yearly Total:');
+      expect(html).toContain('2611 USD');
+    });
   });
 });

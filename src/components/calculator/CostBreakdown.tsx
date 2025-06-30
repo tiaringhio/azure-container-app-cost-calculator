@@ -23,6 +23,7 @@ interface CostBreakdownProps {
   };
   schedule: any; // Add schedule to show detailed calculations
   selectedRegion?: string; // Add region prop
+  freeTierEnabled: boolean; // Add free tier indicator
   getFormattedPrice: (amount: number, decimals?: number) => string;
   pricing: any; // PricingConfig
 }
@@ -34,6 +35,7 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
   currentCombination,
   schedule,
   selectedRegion = 'westeurope',
+  freeTierEnabled,
   getFormattedPrice,
   pricing
 }) => {
@@ -75,10 +77,19 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Cost Breakdown</CardTitle>
-        <CardDescription>
-          Your complete cost analysis and projections
-        </CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle>Cost Breakdown</CardTitle>
+            <CardDescription>
+              Your complete cost analysis and projections
+            </CardDescription>
+          </div>
+          {freeTierEnabled && (
+            <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+              ✨ Free Tier Enabled
+            </Badge>
+          )}
+        </div>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* HERO SECTION - Primary Cost Results */}

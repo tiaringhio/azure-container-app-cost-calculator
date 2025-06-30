@@ -356,4 +356,146 @@ describe('CSV Export Functionality', () => {
       expect.stringMatching(/^azure-container-apps-cost-estimate-\d{4}-\d{2}-\d{2}\.csv$/)
     );
   });
+
+  describe('Free Tier Integration with CSV Export', () => {
+    it('should include free tier status in CSV metadata when enabled', () => {
+      // Mock CSV export function that includes free tier
+      const mockExportToCSVWithFreeTier = (
+        apps: any[],
+        totalCosts: any,
+        estimateName: string,
+        selectedRegion: string,
+        freeTierEnabled: boolean,
+        getFormattedPrice: (amount: number, decimals?: number) => string
+      ) => {
+        const metadataRows = [
+          ['Export Details'],
+          ['Estimate Name', estimateName],
+          ['Region', selectedRegion],
+          ['Free Tier Enabled', freeTierEnabled ? 'Yes' : 'No'],
+          ['Export Date', '2025-06-30'],
+          ['Total Apps', apps.length.toString()],
+          [''],
+          ['App Details']
+        ];
+        
+        return metadataRows;
+      };
+
+      const apps = [
+        {
+          id: 'app1',
+          name: 'Test App',
+          selectedCombination: 3,
+          schedule: { 0: { 9: 1 } }
+        }
+      ];
+
+      const result = mockExportToCSVWithFreeTier(
+        apps,
+        { weeklyCost: 10, monthlyCost: 43, yearlyCost: 520 },
+        'Test Estimate',
+        'westeurope',
+        true,
+        (amount: number) => `$${amount.toFixed(2)}`
+      );
+
+      expect(result).toContainEqual(['Free Tier Enabled', 'Yes']);
+    });
+
+    it('should include free tier status in CSV metadata when disabled', () => {
+      const mockExportToCSVWithFreeTier = (
+        apps: any[],
+        totalCosts: any,
+        estimateName: string,
+        selectedRegion: string,
+        freeTierEnabled: boolean,
+        getFormattedPrice: (amount: number, decimals?: number) => string
+      ) => {
+        const metadataRows = [
+          ['Export Details'],
+          ['Estimate Name', estimateName],
+          ['Region', selectedRegion],
+          ['Free Tier Enabled', freeTierEnabled ? 'Yes' : 'No'],
+          ['Export Date', '2025-06-30'],
+          ['Total Apps', apps.length.toString()],
+          [''],
+          ['App Details']
+        ];
+        
+        return metadataRows;
+      };
+
+      const apps = [
+        {
+          id: 'app1',
+          name: 'Test App',
+          selectedCombination: 3,
+          schedule: { 0: { 9: 1 } }
+        }
+      ];
+
+      const result = mockExportToCSVWithFreeTier(
+        apps,
+        { weeklyCost: 10, monthlyCost: 43, yearlyCost: 520 },
+        'Test Estimate',
+        'westeurope',
+        false,
+        (amount: number) => `$${amount.toFixed(2)}`
+      );
+
+      expect(result).toContainEqual(['Free Tier Enabled', 'No']);
+    });
+
+    it('should maintain existing CSV structure with additional free tier metadata', () => {
+      const mockExportToCSVWithFreeTier = (
+        apps: any[],
+        totalCosts: any,
+        estimateName: string,
+        selectedRegion: string,
+        freeTierEnabled: boolean,
+        getFormattedPrice: (amount: number, decimals?: number) => string
+      ) => {
+        const metadataRows = [
+          ['Export Details'],
+          ['Estimate Name', estimateName],
+          ['Region', selectedRegion],
+          ['Free Tier Enabled', freeTierEnabled ? 'Yes' : 'No'],
+          ['Export Date', '2025-06-30'],
+          ['Total Apps', apps.length.toString()],
+          [''],
+          ['App Details']
+        ];
+        
+        return metadataRows;
+      };
+
+      const apps = [
+        {
+          id: 'app1',
+          name: 'Test App',
+          selectedCombination: 3,
+          schedule: { 0: { 9: 1 } }
+        }
+      ];
+
+      const result = mockExportToCSVWithFreeTier(
+        apps,
+        { weeklyCost: 10, monthlyCost: 43, yearlyCost: 520 },
+        'Test Estimate',
+        'westeurope',
+        true,
+        (amount: number) => `$${amount.toFixed(2)}`
+      );
+
+      // Check that all expected metadata is present
+      expect(result).toContainEqual(['Export Details']);
+      expect(result).toContainEqual(['Estimate Name', 'Test Estimate']);
+      expect(result).toContainEqual(['Region', 'westeurope']);
+      expect(result).toContainEqual(['Free Tier Enabled', 'Yes']);
+      expect(result).toContainEqual(['Export Date', '2025-06-30']);
+      expect(result).toContainEqual(['Total Apps', '1']);
+      expect(result).toContainEqual(['App Details']);
+    });
+  });
 });

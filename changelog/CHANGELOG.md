@@ -5,6 +5,61 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.7] - 2025-06-30
+
+### ✨ Azure Free Tier Support
+- **Free Tier Toggle**: Added toggle switch in Region & Currency panel to enable/disable Azure Free Tier calculations
+- **Visual Indicators**: Free tier status badges in Total Summary, Cost Breakdown, CSV, and PDF exports
+- **Accurate Free Allowances**: Implements official Azure Container Apps free tier limits:
+  - 180,000 vCPU-seconds per month
+  - 360,000 memory GiB-seconds per month  
+  - 2,000,000 requests per month (for future request tracking)
+- **Smart Cost Calculations**: When enabled, automatically applies free allowances to reduce costs for usage within limits
+- **Multi-App Support**: Free tier calculations work across all apps in multi-app scenarios
+- **Real-time Updates**: Toggle immediately recalculates all costs without page refresh
+
+### 🎯 Free Tier Logic
+- Monthly usage calculation with proper conversion from weekly schedules
+- Proportional cost reduction based on billable vs. total usage
+- Handles edge cases where usage exceeds free tier limits
+- Maintains calculation accuracy while providing significant cost savings for small workloads
+
+### 🧪 Comprehensive Testing
+- **15 new tests** covering:
+  - Free tier enabled/disabled scenarios (7 tests)
+  - CSV export with free tier indicators (3 tests)
+  - PDF export with free tier status (5 tests)
+- All 94 tests passing (up from 86 tests)
+- Added test coverage for free tier toggle functionality
+- Enhanced CSV and PDF export test suites with free tier integration
+
+### 🎨 UI/UX Improvements
+- **Modern Toggle Design**: Beautiful switch component using shadcn/ui with blue accent styling
+- **Clear Visual Indicators**: Toggle shows current state with helpful description text
+- **Free Tier Badges**: Visual indicators in Total Summary and Cost Breakdown components
+- **Export Indicators**: Free tier status included in CSV metadata and PDF summary sections
+- **Integrated Panel**: Seamlessly integrated into existing Region & Currency card
+- **Responsive Design**: Works perfectly on mobile and desktop devices
+
+### 🔧 Technical Implementation
+- Enhanced `calculateAppCosts` function with optional `freeTierEnabled` parameter
+- Updated state management in `useMultiApp` hook with `freeTierEnabled` property
+- Added `updateFreeTier` function for state updates
+- Modified cost calculation logic to handle free tier allowances
+- Updated RegionSelector component with new toggle props
+- Enhanced CSV export with free tier metadata inclusion
+- Updated PDF export functions with free tier status indicators
+- Comprehensive TypeScript support for all new features
+- Backward compatibility with existing saved states
+
+### 📚 Documentation
+- Updated README.md with free tier feature documentation
+- Added free tier information to pricing section
+- Enhanced test coverage documentation
+- Updated feature list to highlight free tier support
+
+---
+
 ## [1.0.6] - 2025-06-30
 
 ### ✨ Enhanced PDF Export

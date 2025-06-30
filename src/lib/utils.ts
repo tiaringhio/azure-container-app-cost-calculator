@@ -128,6 +128,7 @@ export function exportToPDF(
   apps: AppData[], 
   pricing: PricingData, 
   estimateName?: string,
+  freeTierEnabled?: boolean,
   totalCosts?: {
     weeklyCost: number;
     monthlyCost: number;
@@ -153,6 +154,7 @@ export function exportToPDF(
     apps, 
     pricing, 
     estimateName || 'Azure Container Apps Cost Estimate',
+    freeTierEnabled || false,
     totalCosts
   );
   
@@ -171,6 +173,7 @@ export function generatePrintableHTML(
   apps: AppData[], 
   pricing: PricingData, 
   estimateName: string,
+  freeTierEnabled: boolean,
   totalCosts?: {
     weeklyCost: number;
     monthlyCost: number;
@@ -263,6 +266,10 @@ export function generatePrintableHTML(
             <div class="flex justify-between">
               <span>Currency:</span>
               <span class="font-semibold">${pricing.currency}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Azure Free Tier:</span>
+              <span class="font-semibold ${freeTierEnabled ? 'text-green-600' : 'text-gray-600'}">${freeTierEnabled ? '✓ Enabled' : '✗ Disabled'}</span>
             </div>
           </div>
         </div>
