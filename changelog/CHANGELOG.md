@@ -5,6 +5,74 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2025-06-30
+
+### ✨ Enhanced PDF Export
+- **Complete cost periods**: PDF exports now include weekly, monthly, and yearly costs to match Total Summary display
+- **Consultation mode**: PDF exports open in new tab for consultation instead of forcing immediate print
+- Users can manually print using Ctrl+P / Cmd+P when needed
+- Enhanced cost breakdown section with comprehensive time period display
+
+### 🎨 PDF Improvements  
+- Professional cost summary with all three time periods (weekly, monthly, yearly)
+- Improved layout with clearly labeled cost periods
+- Better user experience with consultation-first approach
+- Maintains print-optimized styling for when users choose to print
+
+### 🔄 Currency Formatting Consistency
+- **Unified decimal precision**: All costs now use 2 decimal places to match Total Summary
+- Applied to both PDF and CSV exports for consistency
+- Removed legacy 4-decimal formatting in favor of user-friendly 2-decimal display
+- Enhanced readability while maintaining calculation accuracy
+
+### 🧪 Testing
+- Updated PDF export test suite (17 total tests) to reflect new behavior
+- Added specific tests for monthly/yearly cost inclusion
+- Backward compatibility tests for optional total costs parameter
+- Verified new consultation behavior (focus without auto-print)
+- Updated CSV tests for 2-decimal precision consistency
+- All 79 tests passing with enhanced PDF functionality
+
+### 🔧 Technical
+- Enhanced `exportToPDF()` and `generatePrintableHTML()` functions with optional total costs parameter
+- Improved cost breakdown HTML generation with conditional monthly/yearly display
+- Removed automatic print dialog triggering for better user experience
+- Updated currency formatting from `.toFixed(4)` to `.toFixed(2)` across exports
+- Maintained all existing functionality while adding new features
+
+---
+
+## [1.0.5] - 2025-06-30
+
+### ✨ New Features
+- **PDF Export**: Added comprehensive PDF export functionality with print-optimized layout
+- PDF exports use Tailwind print classes for professional document formatting
+- Print-friendly design with proper page breaks and A4 sizing
+- Includes complete estimate summary, cost breakdown, and application details table
+- Professional styling with company branding and metadata
+- Popup blocking detection with user-friendly error messaging
+- Automatic print dialog trigger after content loading
+
+### 🎨 UI/UX Enhancements
+- Added new "Export as PDF" button alongside existing CSV export
+- Enhanced export section with improved button styling and icons
+- Green-colored PDF button to distinguish from CSV export
+- FileText icon for PDF exports, Download icon for CSV exports
+
+### 🧪 Testing
+- Added comprehensive PDF export test suite (11 new tests)
+- Tests cover HTML generation, print styling, cost calculations, and window management
+- Validates popup blocking scenarios and print dialog triggering
+- Ensures proper handling of empty data and multiple applications
+- All 76 tests passing with new PDF export functionality
+
+### 🔧 Technical Implementation
+- Created `exportToPDF()` and `generatePrintableHTML()` utility functions
+- Integrated with existing multi-app state management
+- Proper data conversion from ContainerApp format to export format
+- Responsive table design with alternating row colors for readability
+- Print-specific CSS with `@media print` rules and color adjustment
+
 ## [1.0.4] - 2025-06-30
 
 ### ✨ Enhanced

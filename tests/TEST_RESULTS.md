@@ -1,6 +1,6 @@
 # 📊 Test Results Summary - Azure Container Apps Pricing System
 
-## ✅ All Tests Passing: 65/65
+## ✅ All Tests Passing: 79/79
 
 ### 🎯 Test Coverage
 
@@ -26,10 +26,29 @@
 - ✅ Empty app list handling
 - ✅ Zero instance scenarios
 - ✅ CSV escaping for special characters
-- ✅ Currency formatting precision (4 decimals)
+- ✅ Currency formatting precision (2 decimals for consistency with Total Summary)
 - ✅ Multi-currency and multi-region support
 - ✅ Custom filename generation with estimate names
 - ✅ Filename sanitization and default fallback
+
+#### 📄 **pdf-export.test.ts** (17 tests)
+- ✅ PDF HTML structure generation with print styles
+- ✅ Tailwind CSS integration and responsive design
+- ✅ App data inclusion in printable format
+- ✅ Cost calculation accuracy in PDF exports
+- ✅ Multiple apps handling and aggregation
+- ✅ Empty app list graceful handling
+- ✅ Metadata and timestamp inclusion
+- ✅ Print window management and popup blocking
+- ✅ **NEW**: Focus without auto-print for consultation mode
+- ✅ Default estimate name handling
+- ✅ Cost formatting with proper precision
+- ✅ **NEW**: Monthly and yearly cost inclusion when provided
+- ✅ **NEW**: Backward compatibility without total costs
+- ✅ **NEW**: Enhanced export with complete cost periods
+- ✅ **NEW**: Professional cost breakdown display
+- ✅ **NEW**: Comprehensive time period support
+- ✅ **NEW**: Total costs parameter validation
 
 #### 🌐 **integration.test.ts** (11 tests)
 - ✅ Sistema end-to-end completo
@@ -96,4 +115,4 @@ npm run test:coverage
 ---
 **Status**: ✅ READY FOR COMMIT  
 **Date**: 30 giugno 2025  
-**Total Tests**: 54 passed, 0 failed
+**Total Tests**: 79 passed, 0 failed

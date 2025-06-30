@@ -46,7 +46,7 @@ describe('CSV Export Functionality', () => {
     const csv = generateCSVContent(apps, pricing);
     const lines = csv.split('\n');
     
-    expect(lines[0]).toBe('App Name,CPU (vCPU),Memory (GiB),Region,Currency,Total Hours,CPU Cost,Memory Cost,Total Cost');
+    expect(lines[0]).toBe('App Name,CPU (vCPU),Memory (GiB),Region,Currency,Total Instance Hours,CPU Cost,Memory Cost,Total Cost');
   });
 
   it('should export single app data correctly', () => {
@@ -81,7 +81,7 @@ describe('CSV Export Functionality', () => {
     expect(lines[1]).toContain('2'); // Memory
     expect(lines[1]).toContain('eastus'); // Region
     expect(lines[1]).toContain('USD'); // Currency
-    expect(lines[1]).toContain('3'); // Total hours (3 hours from Monday)
+    expect(lines[1]).toContain('3'); // Total instance hours (3 instances from Monday)
   });
 
   it('should export multiple apps data correctly', () => {
@@ -157,9 +157,9 @@ describe('CSV Export Functionality', () => {
     const expectedTotalMemoryCost = expectedMemoryCostPerHour * totalHours;
     const expectedTotalCost = expectedTotalCpuCost + expectedTotalMemoryCost;
     
-    expect(dataLine[6]).toBe(expectedTotalCpuCost.toFixed(4)); // CPU Cost
-    expect(dataLine[7]).toBe(expectedTotalMemoryCost.toFixed(4)); // Memory Cost
-    expect(dataLine[8]).toBe(expectedTotalCost.toFixed(4)); // Total Cost
+    expect(dataLine[6]).toBe(expectedTotalCpuCost.toFixed(2)); // CPU Cost
+    expect(dataLine[7]).toBe(expectedTotalMemoryCost.toFixed(2)); // Memory Cost
+    expect(dataLine[8]).toBe(expectedTotalCost.toFixed(2)); // Total Cost
   });
 
   it('should handle empty app list', () => {
@@ -174,7 +174,7 @@ describe('CSV Export Functionality', () => {
     const lines = csv.split('\n');
     
     expect(lines).toHaveLength(1); // Only header
-    expect(lines[0]).toBe('App Name,CPU (vCPU),Memory (GiB),Region,Currency,Total Hours,CPU Cost,Memory Cost,Total Cost');
+    expect(lines[0]).toBe('App Name,CPU (vCPU),Memory (GiB),Region,Currency,Total Instance Hours,CPU Cost,Memory Cost,Total Cost');
   });
 
   it('should handle apps with zero instances correctly', () => {
@@ -196,10 +196,10 @@ describe('CSV Export Functionality', () => {
     const lines = csv.split('\n');
     const dataLine = lines[1].split(',');
     
-    expect(dataLine[5]).toBe('0'); // Total Hours
-    expect(dataLine[6]).toBe('0.0000'); // CPU Cost
-    expect(dataLine[7]).toBe('0.0000'); // Memory Cost
-    expect(dataLine[8]).toBe('0.0000'); // Total Cost
+    expect(dataLine[5]).toBe('0'); // Total Instance Hours
+    expect(dataLine[6]).toBe('0.00'); // CPU Cost
+    expect(dataLine[7]).toBe('0.00'); // Memory Cost
+    expect(dataLine[8]).toBe('0.00'); // Total Cost
   });
 
   it('should properly escape CSV values with commas', () => {
@@ -221,7 +221,7 @@ describe('CSV Export Functionality', () => {
     expect(csv).toContain('"App, with comma"');
   });
 
-  it('should format currency values to 4 decimal places', () => {
+  it('should format currency values to 2 decimal places for consistency', () => {
     const apps: AppData[] = [{
       name: 'Precision Test',
       cpu: 0.25, // Small CPU value
@@ -244,10 +244,10 @@ describe('CSV Export Functionality', () => {
     const lines = csv.split('\n');
     const dataLine = lines[1].split(',');
     
-    // Check that all cost values have exactly 4 decimal places
-    expect(dataLine[6]).toMatch(/^\d+\.\d{4}$/); // CPU Cost
-    expect(dataLine[7]).toMatch(/^\d+\.\d{4}$/); // Memory Cost
-    expect(dataLine[8]).toMatch(/^\d+\.\d{4}$/); // Total Cost
+    // Check that all cost values have exactly 2 decimal places for consistency with Total Summary
+    expect(dataLine[6]).toMatch(/^\d+\.\d{2}$/); // CPU Cost
+    expect(dataLine[7]).toMatch(/^\d+\.\d{2}$/); // Memory Cost
+    expect(dataLine[8]).toMatch(/^\d+\.\d{2}$/); // Total Cost
   });
 
   it('should include correct pricing currency', () => {

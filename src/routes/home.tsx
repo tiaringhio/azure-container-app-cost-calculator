@@ -12,8 +12,9 @@ import { AppManager } from '../components/calculator/AppManager';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { ThemeToggle } from '../components/ui/theme-toggle';
-import { Download } from 'lucide-react';
+import { Download, FileText } from 'lucide-react';
 import { usePricing } from '../hooks/usePricing';
+import { exportToPDF } from '../lib/utils';
 import { VALID_COMBINATIONS } from '../lib/constants';
 import type { ContainerApp, CostResults, Schedule } from '../types/calculator';
 
@@ -132,6 +133,31 @@ const exportToCSV = (
     URL.revokeObjectURL(url);
   }
 }
+
+// Helper function to convert ContainerApp[] to AppData[] for export utilities
+const convertAppsForExport = (apps: ContainerApp[], selectedRegion: string) => {
+  return apps.map(app => {
+    const combo = VALID_COMBINATIONS[app.selectedCombination];
+    
+    // Convert Schedule (Record<number, Record<number, number>>) to number[][]
+    const scheduleArray: number[][] = [];
+    for (let day = 0; day < 7; day++) {
+      const daySchedule: number[] = [];
+      for (let hour = 0; hour < 24; hour++) {
+        daySchedule.push(app.schedule[day]?.[hour] || 0);
+      }
+      scheduleArray.push(daySchedule);
+    }
+    
+    return {
+      name: app.name,
+      cpu: combo.cpu,
+      memory: combo.memory,
+      region: selectedRegion,
+      schedule: scheduleArray
+    };
+  });
+};
 
 // Helper function to calculate costs for any app
 const calculateAppCosts = (
@@ -657,8 +683,8 @@ export default function Home() {
                   </div>
                 </div>
                 
-                {/* Export Button */}
-                <div className="pt-4 border-t border-blue-200 dark:border-blue-700">
+                {/* Export Buttons */}
+                <div className="pt-4 border-t border-blue-200 dark:border-blue-700 space-y-2">
                   <Button
                     onClick={() => exportToCSV(
                       multiAppState.apps,
@@ -672,6 +698,28 @@ export default function Home() {
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Export as CSV
+                  </Button>
+                  
+                  <Button
+                    onClick={() => {
+                      const appsForExport = convertAppsForExport(multiAppState.apps, multiAppState.selectedRegion);
+                      const pricingForExport = {
+                        vcpu: { perSecond: pricing.vcpu_per_second },
+                        memory: { perGibPerSecond: pricing.memory_per_gib_second },
+                        currency: selectedCurrency
+                      };
+                      exportToPDF(
+                        appsForExport, 
+                        pricingForExport, 
+                        multiAppState.estimateName,
+                        multiAppState.totalCosts
+                      );
+                    }}
+                    className="w-full bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800 text-white"
+                    size="sm"
+                  >
+                    <FileText className="w-4 h-4 mr-2" />
+                    Export as PDF
                   </Button>
                 </div>
               </CardContent>

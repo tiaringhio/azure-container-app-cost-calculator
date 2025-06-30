@@ -258,7 +258,8 @@ Please use GitHub Issues to report bugs or request features:
 
 - [ ] Azure Dedicated plan support
 - [ ] API integration for real-time pricing
-- [ ] Export to Excel/PDF functionality
+- [ x ] Export to CSV functionality
+- [ ] Export to PDF functionality
 - [ ] Advanced scheduling patterns
 - [ ] Cost optimization recommendations
 - [ ] Team collaboration features
