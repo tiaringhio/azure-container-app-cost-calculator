@@ -1,6 +1,6 @@
 # 📊 Test Results Summary - Azure Container Apps Pricing System
 
-## ✅ All Tests Passing: 54/54
+## ✅ All Tests Passing: 65/65
 
 ### 🎯 Test Coverage
 
@@ -18,6 +18,18 @@
 - ✅ Gestione errori (regioni/valute sconosciute)
 - ✅ Consistenza cross-currency
 - ✅ Scenari costo realistici (small/medium apps)
+
+#### 📋 **csv-export.test.ts** (11 tests)
+- ✅ CSV header generation and formatting
+- ✅ Single and multiple app data export
+- ✅ Cost calculation accuracy in exports
+- ✅ Empty app list handling
+- ✅ Zero instance scenarios
+- ✅ CSV escaping for special characters
+- ✅ Currency formatting precision (4 decimals)
+- ✅ Multi-currency and multi-region support
+- ✅ Custom filename generation with estimate names
+- ✅ Filename sanitization and default fallback
 
 #### 🌐 **integration.test.ts** (11 tests)
 - ✅ Sistema end-to-end completo

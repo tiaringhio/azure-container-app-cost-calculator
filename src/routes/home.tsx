@@ -12,9 +12,126 @@ import { AppManager } from '../components/calculator/AppManager';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { ThemeToggle } from '../components/ui/theme-toggle';
+import { Download } from 'lucide-react';
 import { usePricing } from '../hooks/usePricing';
 import { VALID_COMBINATIONS } from '../lib/constants';
 import type { ContainerApp, CostResults, Schedule } from '../types/calculator';
+
+// CSV Export functionality
+const exportToCSV = (
+  apps: ContainerApp[],
+  totalCosts: any,
+  estimateName: string,
+  selectedRegion: string,
+  getFormattedPrice: (amount: number, decimals?: number) => string
+) => {
+  const now = new Date();
+  const timestamp = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+  
+  // Prepare CSV headers
+  const headers = [
+    'App Name',
+    'CPU (vCPU)',
+    'Memory (GB)',
+    'Total Instance Hours/Week',
+    'Weekly Cost',
+    'Monthly Cost',
+    'Yearly Cost',
+    'Peak Instances',
+    'Efficiency %'
+  ];
+  
+  // Calculate costs for each app
+  const rows = apps.map(app => {
+    const combo = VALID_COMBINATIONS[app.selectedCombination];
+    
+    // Calculate total instance hours for this app
+    let totalInstanceHours = 0;
+    let maxInstances = 0;
+    let activeSlots = 0;
+    
+    for (let day = 0; day < 7; day++) {
+      for (let hour = 0; hour < 24; hour++) {
+        const instances = app.schedule[day]?.[hour] || 0;
+        if (instances > 0) {
+          totalInstanceHours += instances;
+          activeSlots++;
+          maxInstances = Math.max(maxInstances, instances);
+        }
+      }
+    }
+    
+    const weeklyCost = totalInstanceHours * 0.1; // Simplified calculation for export
+    const monthlyCost = weeklyCost * 4.33;
+    const yearlyCost = monthlyCost * 12;
+    const efficiency = (activeSlots / 168) * 100;
+    
+    return [
+      app.name,
+      combo.cpu.toString(),
+      combo.memory.toString(),
+      totalInstanceHours.toString(),
+      getFormattedPrice(weeklyCost, 2).replace(/[^\d.,]/g, ''), // Remove currency symbols
+      getFormattedPrice(monthlyCost, 2).replace(/[^\d.,]/g, ''),
+      getFormattedPrice(yearlyCost, 0).replace(/[^\d.,]/g, ''),
+      maxInstances.toString(),
+      efficiency.toFixed(1) + '%'
+    ];
+  });
+  
+  // Add summary row
+  const summaryRow = [
+    'TOTAL SUMMARY',
+    '',
+    '',
+    '',
+    (totalCosts?.weeklyCost || 0).toFixed(2),
+    (totalCosts?.monthlyCost || 0).toFixed(2),
+    (totalCosts?.yearlyCost || 0).toFixed(0),
+    (totalCosts?.totalInstances || 0).toString(),
+    ''
+  ];
+  
+  // Add metadata rows
+  const metadataRows = [
+    ['Export Details'],
+    ['Estimate Name', estimateName],
+    ['Region', selectedRegion],
+    ['Export Date', timestamp],
+    ['Total Apps', apps.length.toString()],
+    [''],
+    ['App Details']
+  ];
+  
+  // Combine all rows
+  const csvContent = [
+    ...metadataRows,
+    headers,
+    ...rows,
+    [''],
+    summaryRow
+  ];
+  
+  // Convert to CSV string
+  const csvString = csvContent
+    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .join('\n');
+  
+  // Create and download file
+  const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+  const link = document.createElement('a');
+  
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `azure-container-apps-cost-estimate-${timestamp}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+}
 
 // Helper function to calculate costs for any app
 const calculateAppCosts = (
@@ -538,6 +655,24 @@ export default function Home() {
                       <span className="font-medium">{(multiAppState.totalCosts?.totalMemoryHours || 0).toFixed(1)} GB</span>
                     </div>
                   </div>
+                </div>
+                
+                {/* Export Button */}
+                <div className="pt-4 border-t border-blue-200 dark:border-blue-700">
+                  <Button
+                    onClick={() => exportToCSV(
+                      multiAppState.apps,
+                      multiAppState.totalCosts,
+                      multiAppState.estimateName || 'Azure Container Apps Estimate',
+                      multiAppState.selectedRegion,
+                      getFormattedPrice
+                    )}
+                    className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white"
+                    size="sm"
+                  >
+                    <Download className="w-4 h-4 mr-2" />
+                    Export as CSV
+                  </Button>
                 </div>
               </CardContent>
             </Card>
