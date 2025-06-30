@@ -199,6 +199,17 @@ export default function Home() {
     setTimeout(() => syncAppWithCalculator(), 0);
   }, [applySteps, syncAppWithCalculator]);
 
+  // Trigger recalculation when the active app's calculator state changes
+  useEffect(() => {
+    if (activeApp) {
+      // Piccolo ritardo per permettere che tutte le modifiche siano applicate
+      const timeoutId = setTimeout(() => {
+        syncAppWithCalculator();
+      }, 50);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [state.selectedCombination, state.schedule, syncAppWithCalculator]);
+
   // Calculate total costs for all apps (debounced to avoid too frequent updates)
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -233,11 +244,33 @@ export default function Home() {
           totalCpuHours,
           totalMemoryHours
         });
+      } else {
+        // Se non ci sono app, imposta tutto a 0
+        updateTotalCosts({
+          weeklyCost: 0,
+          monthlyCost: 0,
+          yearlyCost: 0,
+          totalInstances: 0,
+          totalCpuHours: 0,
+          totalMemoryHours: 0
+        });
       }
     }, 100); // Debounce di 100ms
 
     return () => clearTimeout(timeoutId);
-  }, [multiAppState.apps, multiAppState.selectedRegion, pricing, updateTotalCosts]);
+  }, [
+    multiAppState.apps.length,
+    multiAppState.selectedRegion,
+    pricing,
+    updateTotalCosts,
+    // Aggiungi una dipendenza che cambierà quando le app vengono modificate
+    JSON.stringify(multiAppState.apps.map(app => ({
+      id: app.id,
+      selectedCombination: app.selectedCombination,
+      schedule: app.schedule,
+      configSteps: app.configSteps
+    })))
+  ]);
 
   // Calculate costs for active app using dynamic pricing
   const costResults = React.useMemo(() => {
