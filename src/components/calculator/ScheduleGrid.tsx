@@ -5,13 +5,15 @@ import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 interface ScheduleGridProps {
   schedule: Schedule;
   onUpdateSchedule: (day: number, hour: number, instances: number) => void;
+  getFormattedPrice: (amount: number, decimals?: number) => string;
 }
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
   schedule,
-  onUpdateSchedule
+  onUpdateSchedule,
+  getFormattedPrice
 }) => {
   const getCellClassName = (instances: number) => {
     if (instances === 0) return 'bg-gray-50 dark:bg-gray-900 text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700';
@@ -40,7 +42,7 @@ export const ScheduleGrid: React.FC<ScheduleGridProps> = ({
           <div className="flex flex-wrap gap-4 text-xs">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded"></div>
-              <span>0 instances (€0.00/hour)</span>
+              <span>0 instances ({getFormattedPrice(0, 2)}/hour)</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-green-100 dark:bg-green-900/50 border border-green-200 dark:border-green-700 rounded"></div>

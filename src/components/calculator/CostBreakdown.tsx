@@ -4,7 +4,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { VALID_COMBINATIONS, AZURE_REGIONS, RESOURCE_PRESETS } from '../../lib/constants';
-import { usePricing } from '../../hooks/usePricing';
 
 interface CostBreakdownProps {
   costResults: {
@@ -24,6 +23,8 @@ interface CostBreakdownProps {
   };
   schedule: any; // Add schedule to show detailed calculations
   selectedRegion?: string; // Add region prop
+  getFormattedPrice: (amount: number, decimals?: number) => string;
+  pricing: any; // PricingConfig
 }
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -32,12 +33,11 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
   costResults,
   currentCombination,
   schedule,
-  selectedRegion = 'westeurope'
+  selectedRegion = 'westeurope',
+  getFormattedPrice,
+  pricing
 }) => {
   const [showDetailedCalculations, setShowDetailedCalculations] = useState(false);
-  
-  // Use dynamic pricing with the selected region
-  const { pricing, getFormattedPrice } = usePricing(selectedRegion);
   
   const cpuCostPerHour = currentCombination.cpu * pricing.vcpu_per_second * 3600;
   const memoryCostPerHour = currentCombination.memory * pricing.memory_per_gib_second * 3600;
@@ -88,7 +88,7 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
             <Card className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border-green-200 dark:border-green-800">
               <CardContent className="p-4">
                 <div className="text-center">
-                  <div className="text-xl font-bold text-green-700 dark:text-green-300">€{(costResults.weeklyCost / 7).toFixed(2)}</div>
+                  <div className="text-xl font-bold text-green-700 dark:text-green-300">{getFormattedPrice(costResults.weeklyCost / 7, 2)}</div>
                   <p className="text-sm font-medium text-green-600 dark:text-green-400 mt-1">Daily Cost</p>
                   <p className="text-xs text-green-500 dark:text-green-500">per day average</p>
                 </div>
@@ -260,7 +260,7 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
                         <TableCell className="text-right">{day.totalInstances}</TableCell>
                         <TableCell className="text-right">{day.activeHours}/24</TableCell>
                         <TableCell className="text-right">{day.averageInstances.toFixed(2)}</TableCell>
-                        <TableCell className="text-right">€{day.totalCost.toFixed(3)}</TableCell>
+                        <TableCell className="text-right">{getFormattedPrice(day.totalCost, 3)}</TableCell>
                       </TableRow>
                     ))}
                     <TableRow className="border-t-2 font-medium">
@@ -275,7 +275,7 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
                         {(dailyBreakdown.reduce((sum, day) => sum + day.totalInstances, 0) / 168).toFixed(2)}
                       </TableCell>
                       <TableCell className="text-right">
-                        €{dailyBreakdown.reduce((sum, day) => sum + day.totalCost, 0).toFixed(2)}
+                        {getFormattedPrice(dailyBreakdown.reduce((sum, day) => sum + day.totalCost, 0), 2)}
                       </TableCell>
                     </TableRow>
                   </TableBody>
@@ -310,7 +310,7 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
                     <ul className="mt-1 space-y-1 text-xs text-muted-foreground">
                       <li>• Active slots: {costResults.activeSlots} out of 168 total weekly time slots</li>
                       <li>• Efficiency: ({costResults.activeSlots} ÷ 168) × 100 = {costResults.efficiencyPercentage.toFixed(1)}%</li>
-                      <li>• Cost savings from scaling to zero: €{((168 * costResults.maxInstances * costResults.totalCostPerInstancePerHour) - costResults.weeklyCost).toFixed(2)}/week</li>
+                      <li>• Cost savings from scaling to zero: {getFormattedPrice((168 * costResults.maxInstances * costResults.totalCostPerInstancePerHour) - costResults.weeklyCost, 2)}/week</li>
                     </ul>
                   </div>
                 </div>
@@ -326,7 +326,7 @@ export const CostBreakdown: React.FC<CostBreakdownProps> = ({
                   </Card>
                   <Card className="p-3">
                     <div className="text-lg font-bold text-green-600">
-                      €{(costResults.maxInstances * costResults.totalCostPerInstancePerHour).toFixed(3)}
+                      {getFormattedPrice(costResults.maxInstances * costResults.totalCostPerInstancePerHour, 3)}
                     </div>
                     <div className="text-xs text-muted-foreground">Peak hourly cost</div>
                   </Card>

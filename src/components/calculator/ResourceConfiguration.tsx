@@ -4,31 +4,22 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 import { VALID_COMBINATIONS, RESOURCE_PRESETS } from '../../lib/constants';
-import { usePricing } from '../../hooks/usePricing';
 
 interface ResourceConfigurationProps {
   selectedCombination: number;
   onCombinationChange: (index: number) => void;
   selectedRegion?: string;
+  getFormattedPrice: (amount: number, decimals?: number) => string;
+  pricing: any; // PricingConfig
 }
 
 export const ResourceConfiguration: React.FC<ResourceConfigurationProps> = ({
   selectedCombination,
   onCombinationChange,
-  selectedRegion
+  selectedRegion,
+  getFormattedPrice,
+  pricing
 }) => {
-  const {
-    selectedRegion: currentRegion,
-    selectedCurrency,
-    pricing,
-    currencySymbol,
-    regions,
-    currencies,
-    updateRegion,
-    updateCurrency,
-    getFormattedPrice
-  } = usePricing(selectedRegion);
-
   const currentCombo = VALID_COMBINATIONS[selectedCombination];
   
   // Calculate current cost with dynamic pricing
@@ -47,66 +38,23 @@ export const ResourceConfiguration: React.FC<ResourceConfigurationProps> = ({
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="grid gap-4 md:grid-cols-3">
-          <div className="space-y-2">
-            <label className="text-sm font-medium">CPU/Memory</label>
-            <Select
-              value={selectedCombination.toString()}
-              onValueChange={(value) => onCombinationChange(parseInt(value))}
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {VALID_COMBINATIONS.map((combo, index) => (
-                  <SelectItem key={index} value={index.toString()}>
-                    {combo.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Region</label>
-            <Select value={selectedRegion} onValueChange={updateRegion}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {regions.map((region) => (
-                  <SelectItem key={region.value} value={region.value}>
-                    <div className="flex items-center justify-between w-full">
-                      <span>{region.label}</span>
-                      <Badge variant="outline" className="ml-2 text-xs">
-                        {region.currency}
-                      </Badge>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Currency</label>
-            <Select value={selectedCurrency} onValueChange={updateCurrency}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {currencies.map((currency) => (
-                  <SelectItem key={currency.code} value={currency.code}>
-                    <div className="flex items-center gap-2">
-                      <span>{currency.symbol}</span>
-                      <span>{currency.code}</span>
-                      <span className="text-xs text-muted-foreground">({currency.name})</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+        <div className="flex items-center gap-4">
+          <label className="text-sm font-medium whitespace-nowrap">CPU/Memory</label>
+          <Select
+            value={selectedCombination.toString()}
+            onValueChange={(value) => onCombinationChange(parseInt(value))}
+          >
+            <SelectTrigger className="flex-1">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {VALID_COMBINATIONS.map((combo, index) => (
+                <SelectItem key={index} value={index.toString()}>
+                  {combo.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         {/* Cost Summary Card */}
@@ -117,9 +65,6 @@ export const ResourceConfiguration: React.FC<ResourceConfigurationProps> = ({
                 <div className="text-sm font-medium text-blue-900 dark:text-blue-100">Current Configuration</div>
                 <div className="text-xs text-blue-700 dark:text-blue-300">
                   {currentCombo.cpu} vCPU, {currentCombo.memory} GB Memory
-                </div>
-                <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                  Region: {regions.find(r => r.value === selectedRegion)?.label} ({selectedCurrency})
                 </div>
               </div>
               <div className="text-right">

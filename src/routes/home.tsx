@@ -7,6 +7,7 @@ import { StepConfiguration } from '../components/calculator/StepConfiguration';
 import { ScheduleGrid } from '../components/calculator/ScheduleGrid';
 import { SchedulePresets } from '../components/calculator/SchedulePresets';
 import { ChartVisualization } from '../components/calculator/ChartVisualization';
+import { RegionSelector } from '../components/calculator/RegionSelector';
 import { AppManager } from '../components/calculator/AppManager';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -125,6 +126,11 @@ export default function Home() {
     getCurrentCombination,
     setState
   } = useCalculator();
+
+  // Sync pricing region with multi-app region
+  useEffect(() => {
+    updatePricingRegion(multiAppState.selectedRegion);
+  }, [multiAppState.selectedRegion, updatePricingRegion]);
 
   // Sync active app data with calculator state
   useEffect(() => {
@@ -309,9 +315,18 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-12 xl:grid-cols-12">
-        {/* Left Sidebar - App Management (Sticky) */}
+        {/* Left Sidebar - Region & App Management (Sticky) */}
         <div className="order-1 md:order-1 lg:col-span-3 xl:col-span-3">
-          <div className="lg:sticky lg:top-6">
+          <div className="lg:sticky lg:top-6 space-y-6">
+            {/* Region Selector */}
+            <RegionSelector
+              selectedRegion={multiAppState.selectedRegion}
+              onRegionChange={updateRegion}
+              currencySymbol={pricing.currencySymbol}
+              currency={pricing.currency}
+            />
+            
+            {/* App Manager */}
             <AppManager
               apps={multiAppState.apps}
               activeAppId={multiAppState.activeAppId}
@@ -332,6 +347,8 @@ export default function Home() {
             selectedCombination={state.selectedCombination}
             onCombinationChange={handleCombinationChange}
             selectedRegion={multiAppState.selectedRegion}
+            getFormattedPrice={getFormattedPrice}
+            pricing={pricing}
           />
 
           {/* Step Configuration */}
@@ -347,6 +364,7 @@ export default function Home() {
           <ScheduleGrid
             schedule={state.schedule}
             onUpdateSchedule={handleScheduleUpdate}
+            getFormattedPrice={getFormattedPrice}
           />
 
           {/* Schedule Presets */}
@@ -359,6 +377,8 @@ export default function Home() {
             schedule={state.schedule}
             costResults={costResults}
             currentCombination={currentCombination}
+            getFormattedPrice={getFormattedPrice}
+            pricing={pricing}
           />
 
           {/* Cost Summary */}
@@ -397,6 +417,8 @@ export default function Home() {
             currentCombination={currentCombination}
             schedule={state.schedule}
             selectedRegion={multiAppState.selectedRegion}
+            getFormattedPrice={getFormattedPrice}
+            pricing={pricing}
           />
         </div>
 
@@ -421,7 +443,7 @@ export default function Home() {
                     <div className="w-full p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
                       <div className="text-center space-y-2">
                         <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 break-all">
-                          €{(multiAppState.totalCosts?.weeklyCost || 0).toFixed(2)}
+                          {getFormattedPrice(multiAppState.totalCosts?.weeklyCost || 0, 2)}
                         </div>
                         <div className="text-sm text-blue-700 dark:text-blue-300 font-medium border-t border-blue-200 dark:border-blue-600 pt-2">
                           Weekly
@@ -433,7 +455,7 @@ export default function Home() {
                     <div className="w-full p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
                       <div className="text-center space-y-2">
                         <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 break-all">
-                          €{(multiAppState.totalCosts?.monthlyCost || 0).toFixed(2)}
+                          {getFormattedPrice(multiAppState.totalCosts?.monthlyCost || 0, 2)}
                         </div>
                         <div className="text-sm text-blue-700 dark:text-blue-300 font-medium border-t border-blue-200 dark:border-blue-600 pt-2">
                           Monthly
@@ -445,7 +467,7 @@ export default function Home() {
                     <div className="w-full p-4 bg-blue-100 dark:bg-blue-900/40 rounded-lg border border-blue-200 dark:border-blue-700">
                       <div className="text-center space-y-2">
                         <div className="text-2xl font-bold text-blue-900 dark:text-blue-100 break-all">
-                          €{(multiAppState.totalCosts?.yearlyCost || 0).toFixed(0)}
+                          {getFormattedPrice(multiAppState.totalCosts?.yearlyCost || 0, 0)}
                         </div>
                         <div className="text-sm text-blue-700 dark:text-blue-300 font-medium border-t border-blue-200 dark:border-blue-600 pt-2">
                           Yearly

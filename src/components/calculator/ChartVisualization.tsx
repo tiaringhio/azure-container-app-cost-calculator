@@ -3,12 +3,13 @@ import type { Schedule, CostResults } from '../../types/calculator';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { usePricing } from '../../hooks/usePricing';
 
 interface ChartVisualizationProps {
   schedule: Schedule;
   costResults: CostResults;
   currentCombination: { cpu: number; memory: number; label: string };
+  getFormattedPrice: (amount: number, decimals?: number) => string;
+  pricing: any; // PricingConfig
 }
 
 type ViewType = 'day' | 'week' | 'month';
@@ -19,13 +20,12 @@ const HOURS = Array.from({ length: 24 }, (_, i) => `${i.toString().padStart(2, '
 export const ChartVisualization: React.FC<ChartVisualizationProps> = ({
   schedule,
   costResults,
-  currentCombination
+  currentCombination,
+  getFormattedPrice,
+  pricing
 }) => {
   const [activeView, setActiveView] = useState<ViewType>('day');
   const [selectedDay, setSelectedDay] = useState(0); // Monday by default
-
-  // Use dynamic pricing
-  const { getFormattedPrice, pricing } = usePricing();
 
   // Calculate hourly costs for the selected day
   const dayInstancesData = useMemo(() => {
@@ -105,7 +105,7 @@ export const ChartVisualization: React.FC<ChartVisualizationProps> = ({
             </div>
             <div className="flex items-center gap-1">
               <div className="w-3 h-3 bg-green-500 rounded"></div>
-              <span>Cost (€)</span>
+              <span>Cost ({pricing.currencySymbol})</span>
             </div>
           </div>
 
@@ -151,7 +151,7 @@ export const ChartVisualization: React.FC<ChartVisualizationProps> = ({
                         item.cost === 0 ? 'bg-muted-foreground/50' : 'bg-green-500'
                       }`}
                       style={{ height: `${item.cost === 0 ? 100 : (item.cost / maxCost) * 100}%` }}
-                      title={`€${item.cost.toFixed(3)} cost at ${item.time}`}
+                      title={`${getFormattedPrice(item.cost, 3)} cost at ${item.time}`}
                     />
                   </div>
                 </div>
@@ -191,7 +191,7 @@ export const ChartVisualization: React.FC<ChartVisualizationProps> = ({
               
               {/* Daily cost */}
               <div className="text-xs">
-                <div className="font-medium">€{item.cost.toFixed(2)}</div>
+                <div className="font-medium">{getFormattedPrice(item.cost, 2)}</div>
                 <div className="text-muted-foreground">{item.totalInstances}h total</div>
               </div>
             </div>
@@ -249,7 +249,7 @@ export const ChartVisualization: React.FC<ChartVisualizationProps> = ({
               <div key={index} className="p-3 bg-muted/50 rounded text-center">
                 <div className="text-sm font-medium">{item.week}</div>
                 <div className="text-xs text-muted-foreground">
-                  €{item.cost.toFixed(2)}
+                  {getFormattedPrice(item.cost, 2)}
                 </div>
               </div>
             ))}

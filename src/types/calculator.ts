@@ -9,6 +9,8 @@ export interface CpuMemoryCombination {
 export interface PricingConfig {
   vcpu_per_second: number;
   memory_per_gib_second: number;
+  currency: string;
+  currencySymbol: string;
   regions: Record<string, number>;
 }
 

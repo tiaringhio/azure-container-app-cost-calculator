@@ -43,8 +43,8 @@ export const usePricing = (initialRegion = 'westeurope'): UsePricingReturn => {
   }, []);
 
   const getFormattedPrice = useCallback((amount: number, decimals = 4): string => {
-    return `${currencySymbol}${amount.toFixed(decimals)}`;
-  }, [currencySymbol]);
+    return `${pricing.currencySymbol}${amount.toFixed(decimals)}`;
+  }, [pricing.currencySymbol]);
 
   return {
     selectedRegion,

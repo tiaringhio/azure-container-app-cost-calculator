@@ -8,6 +8,8 @@ const pricingData = azurePricingData as PricingData;
 export const PRICING: PricingConfig = {
   vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur.perSecond,
   memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.eur.perGibPerSecond,
+  currency: 'EUR',
+  currencySymbol: '€',
   regions: Object.fromEntries(
     Object.entries(pricingData.regions).map(([key, region]) => [key, region.multiplier])
   )
@@ -52,37 +54,78 @@ export const CURRENCIES: Currency[] = Object.entries(pricingData.currencies).map
   name: currency.name
 }));
 
+// Funzione helper per convertire prezzi tra valute
+const convertPrice = (price: number, fromCurrency: string, toCurrency: string): number => {
+  if (fromCurrency === toCurrency) return price;
+  
+  const currencies = pricingData.currencies;
+  
+  // Se abbiamo il tasso diretto
+  if (currencies[fromCurrency as keyof typeof currencies]?.rates[toCurrency]) {
+    return price * currencies[fromCurrency as keyof typeof currencies].rates[toCurrency];
+  }
+  
+  // Conversione tramite USD come valuta base
+  if (fromCurrency !== 'USD' && toCurrency !== 'USD') {
+    const toUSD = fromCurrency === 'USD' ? price : price * (currencies[fromCurrency as keyof typeof currencies]?.rates.USD || 1);
+    return toUSD * (currencies.USD?.rates[toCurrency] || 1);
+  }
+  
+  return price;
+};
+
 // Funzione per ottenere il pricing dinamico
 export const getDynamicPricing = (region: string, currency: string): PricingConfig => {
   const regionData = pricingData.regions[region as keyof typeof pricingData.regions];
   
   if (!regionData) {
     console.warn(`Region ${region} not found, using defaults`);
-    return PRICING;
+    return {
+      ...PRICING,
+      currency: 'EUR',
+      currencySymbol: '€'
+    };
   }
 
   // Determina la valuta della regione
   const regionCurrency = regionData.currency;
   let basePricing;
 
-  // Usa direttamente i prezzi nella valuta della regione se disponibili
+  // Usa direttamente i prezzi nella valuta della regione se disponibili nel JSON
   if (regionCurrency === 'EUR' && pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur) {
     basePricing = {
       vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.eur.perSecond,
       memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.eur.perGibPerSecond,
+      currency: 'EUR'
     };
-  } else {
-    // Fallback a USD se la valuta della regione non è disponibile
+  } else if (regionCurrency === 'USD' && pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd) {
     basePricing = {
       vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd.perSecond,
       memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perGibPerSecond,
+      currency: 'USD'
+    };
+  } else {
+    // Per altre valute, converti da USD
+    const usdPricing = {
+      vcpu_per_second: pricingData.consumptionPlan.activeUsage.pricing.vcpu.usd.perSecond,
+      memory_per_gib_second: pricingData.consumptionPlan.activeUsage.pricing.memory.usd.perGibPerSecond,
+    };
+    
+    basePricing = {
+      vcpu_per_second: convertPrice(usdPricing.vcpu_per_second, 'USD', regionCurrency),
+      memory_per_gib_second: convertPrice(usdPricing.memory_per_gib_second, 'USD', regionCurrency),
+      currency: regionCurrency
     };
   }
 
   // Applica il moltiplicatore della regione
+  const currencySymbol = pricingData.currencies[basePricing.currency as keyof typeof pricingData.currencies]?.symbol || '$';
+  
   return {
     vcpu_per_second: basePricing.vcpu_per_second * regionData.multiplier,
     memory_per_gib_second: basePricing.memory_per_gib_second * regionData.multiplier,
+    currency: basePricing.currency,
+    currencySymbol: currencySymbol,
     regions: Object.fromEntries(
       Object.entries(pricingData.regions).map(([key, region]) => [key, region.multiplier])
     )
